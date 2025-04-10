@@ -7,7 +7,7 @@ import { useRef } from "react";
 
 export default function CustomCarousel() {
 	const cardProperties =
-		"w-[400px] min-w-[400px] h-[225px] p-[20px] pt-[30px] rounded-[10px] shadow-[0_0_10px_10px_#00000033] shadow-[#00000033] mr-[30px]";
+		"w-[400px] min-w-[400px] h-[225px] p-[20px] pt-[30px] rounded-[10px] shadow-[0_0_18px_0] shadow-[#00000033] mr-[30px]";
 	const carouselRef: React.RefObject<null | HTMLDivElement> = useRef(null);
 
 	const [scrollLeft, setScrollLeft] = useState<undefined | number>();

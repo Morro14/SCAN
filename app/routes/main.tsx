@@ -1,6 +1,8 @@
+import TarrifCard from "~/components/TariffCard";
 import img1 from "../media/main-img-1.svg";
 import img2 from "../media/main-img-2.svg";
 import CustomCarousel from "~/components/Carousel";
+import Footer from "~/components/Footer";
 
 export default function Main() {
 	return (
@@ -38,7 +40,11 @@ export default function Main() {
 			</div>
 			<div>
 				<h2 className="main-headline-2">Наши тарифы</h2>
-				<div className="flex flex-row"></div>
+				<div className="flex flex-row justify-between">
+					<TarrifCard category="beginner"></TarrifCard>
+					<TarrifCard category="pro"></TarrifCard>
+					<TarrifCard category="buisness"></TarrifCard>
+				</div>
 			</div>
 		</div>
 	);
