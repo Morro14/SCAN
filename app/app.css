@@ -1,15 +1,38 @@
 @import "tailwindcss";
 
+@font-face {
+	font-family: "Ferry Black";
+	src: url("./fonts/ferry_black.otf") format("opentype");
+	font-weight: bold;
+	font-style: normal;
+}
+
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--font-ferry: "Ferry Black";
+	--color-viridian-500: #029491;
+	--color-orange-501: #ffb64f;
+	--color-sky-501: #7ce3e1;
+	--color-blue-501: #5970ff;
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+	@apply bg-white dark:bg-gray-950;
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+	@media (prefers-color-scheme: dark) {
+		color-scheme: dark;
+	}
+}
+.btn {
+	@apply hover:cursor-pointer;
+}
+
+.black {
+	font-family: "Ferry Black";
+}
+
+.main-headline-2 {
+	@apply font-ferry text-[45px] mt-[109px] mb-[50px];
 }
