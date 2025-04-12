@@ -9,7 +9,7 @@ export default function Header() {
 	const [auth, setAuth] = useState(false);
 	const store = useStore();
 	const dispatch = useDispatch();
-	console.log(store.getState());
+
 	const storeData = store.getState() as RootState;
 	const infoGroup = (
 		<div className="flex justify-center flex-col w-[175px] h-[63px] bg-[#D9D9D9]/40 rounded-[5px] p-[8px]">

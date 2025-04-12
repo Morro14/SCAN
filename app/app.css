@@ -36,3 +36,6 @@ body {
 .main-headline-2 {
 	@apply font-ferry text-[45px] mt-[109px] mb-[50px];
 }
+.shadowed {
+	@apply shadow-[0_0_18px_0] shadow-[#00000033];
+}

@@ -7,7 +7,7 @@ import { useRef } from "react";
 
 export default function CustomCarousel() {
 	const cardProperties =
-		"w-[400px] min-w-[400px] h-[225px] p-[20px] pt-[30px] rounded-[10px] shadow-[0_0_18px_0] shadow-[#00000033] mr-[30px]";
+		"w-[400px] min-w-[400px] h-[225px] p-[20px] pt-[30px] rounded-[10px] shadowed mr-[30px]";
 	const carouselRef: React.RefObject<null | HTMLDivElement> = useRef(null);
 
 	const [scrollLeft, setScrollLeft] = useState<undefined | number>();
@@ -49,8 +49,6 @@ export default function CustomCarousel() {
 		} else {
 			leftArrowDisabled = false;
 		}
-		// console.log(scrollLeft, scrollLeftMax);
-		// console.log(leftArrowDisabled, rightArrowDisabled);
 	}
 
 	return (
@@ -62,7 +60,7 @@ export default function CustomCarousel() {
 				disable={leftArrowDisabled}
 			></CarouselLeftArrow>
 			<div
-				className="overflow-x-scroll scroll-smooth"
+				className="overflow-x-scroll scroll-smooth relative left-[-20px]"
 				ref={carouselRef}
 				onScroll={handleScroll}
 			>

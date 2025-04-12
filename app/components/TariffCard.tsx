@@ -64,7 +64,7 @@ export default function TarrifCard({
 	const styleString = `${variables[category].icon.size.w} ${variables[category].icon.size.h}`;
 
 	return (
-		<div className="w-[415px] h-[546px] rounded-[10px] shadow-[0_0_18px_0] shadow-[#00000033]">
+		<div className="w-[415px] h-[546px] rounded-[10px] shadowed">
 			<div
 				className={`${variables[category].color} h-[132px] rounded-t-[10px]`}
 			>
