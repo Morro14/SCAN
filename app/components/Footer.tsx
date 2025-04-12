@@ -2,7 +2,7 @@ import logo from "../media/footer-logo.svg";
 
 export default function Footer() {
 	return (
-		<div className="flex flex-row justify-between h-[137px] bg-viridian-500 mt-[118px]">
+		<div className="flex flex-row justify-between h-[143px] bg-viridian-500 mt-[118px]">
 			<img
 				src={logo}
 				alt=""

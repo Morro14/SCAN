@@ -16,11 +16,16 @@ export default function Home({ children }: { children: React.ReactNode }) {
 	return (
 		<>
 			<CotnextProvider>
-				<Header></Header>
-				<div className="pl-[60px] pr-[60px]">
-					<Outlet></Outlet>
+				<div className="flex flex-col justify-between h-full">
+					<div>
+						<Header></Header>
+
+						<main className="pl-[60px] pr-[60px]">
+							<Outlet></Outlet>
+						</main>
+					</div>
+					<Footer></Footer>
 				</div>
-				<Footer></Footer>
 			</CotnextProvider>
 		</>
 	);

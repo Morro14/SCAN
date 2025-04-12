@@ -15,6 +15,7 @@
 	--color-orange-501: #ffb64f;
 	--color-sky-501: #7ce3e1;
 	--color-blue-501: #5970ff;
+	--main-height: calc(100vh - 348px);
 }
 
 html,
@@ -24,6 +25,8 @@ body {
 	@media (prefers-color-scheme: dark) {
 		color-scheme: dark;
 	}
+
+	@apply h-full;
 }
 .btn {
 	@apply hover:cursor-pointer;
