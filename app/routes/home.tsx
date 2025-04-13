@@ -1,5 +1,4 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
 import Header from "../components/Header";
 import { Outlet } from "react-router";
 import Footer from "~/components/Footer";

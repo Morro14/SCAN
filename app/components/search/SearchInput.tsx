@@ -18,26 +18,29 @@ export default function SearchInput({
 		register,
 		formState: { errors },
 	} = useFormContext();
-	const authContext: any = useGlobalContext();
+	const context: any = useGlobalContext();
 
 	const isInvalid: boolean = isFormInvalid(errors);
 	const inputError = findErrors(errors, name);
 	const handleChange = (e: any) => {
-		authContext.setAuthData({
-			...authContext.authData,
+		context.setSearchData({
+			...context.searchData,
 			[name]: e.target.value.length > 0,
 		});
 	};
 
 	return (
 		<div className="mt-[-6px]">
-			<label className="text-base text-[#949494] ">{label}</label>
+			<div className="flex flex-row items-end">
+				<label className="text-lg ">{label}</label>
+				<div className="text-[25px]">*</div>
+			</div>
 			<div className="flex">
 				<input
 					type="text"
 					placeholder={placeholder}
 					{...register(name, validation)}
-					className="w-[100%] h-[43px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px]"
+					className="w-[242px] h-[43px] pl-[17px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px]"
 					onChange={(e) => handleChange(e)}
 				/>
 			</div>

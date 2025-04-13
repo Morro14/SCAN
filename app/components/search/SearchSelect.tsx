@@ -10,14 +10,37 @@ export default function SearchSelect({
 	let optCount = 0;
 	return (
 		<div>
-			<label>{label}</label>
+			<div className="flex flex-row items-end">
+				<label className="text-lg ">{label}</label>
+				<div className="text-[25px]">*</div>
+			</div>
 			<div>
-				<select name={name}>
+				<select
+					name={name}
+					className="w-[242px] h-[43px] pl-[17px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px]"
+				>
 					{selectOpt.map((opt) => {
 						optCount += 1;
-						return <option key={"opt-" + optCount}>{opt}</option>;
+						return (
+							<option
+								key={"opt-" + optCount}
+								className=""
+							>
+								{opt}
+							</option>
+						);
 					})}
 				</select>
+			</div>
+			<div className="h-[26px]">
+				{/* {isInvalid && Object.keys(inputError).length > 0 && (
+					<div className="flex justify-center">
+						<InputError
+							message={inputError.error ? inputError.error : ""}
+							key={inputError.error}
+						></InputError>
+					</div>
+				)} */}
 			</div>
 		</div>
 	);

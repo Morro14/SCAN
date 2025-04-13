@@ -38,11 +38,13 @@ export default function Search() {
 				<div className="shadowed min-w-[872px] w-[872px] h-[543px] rounded-[10px] pl-[44px]">
 					<SearchForm></SearchForm>
 				</div>
-				<div className="relative top-[66px] right-[-80px] min-w-[443px]">
-					<img
-						src={img1}
-						alt="search-img"
-					/>
+				<div className="overflow-clip">
+					<div className="relative top-[66px] right-[-80px] min-w-[443px]">
+						<img
+							src={img1}
+							alt="search-img"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
