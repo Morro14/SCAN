@@ -1,8 +1,8 @@
-import carouselIcon1 from "../media/carousel-icon-1.png";
-import carouselIcon2 from "../media/carousel-icon-2.png";
+import carouselIcon1 from "../../media/carousel-icon-1.png";
+import carouselIcon2 from "../../media/carousel-icon-2.png";
 import CarouselLeftArrow from "./CarouselLeftArrow";
 import CarouselRightArrow from "./CarouselRightArrow";
-import { useState, type UIEventHandler } from "react";
+import { useState } from "react";
 import { useRef } from "react";
 
 export default function CustomCarousel() {
@@ -17,7 +17,6 @@ export default function CustomCarousel() {
 		if (carouselRef.current) {
 			setScrollLeft(carouselRef.current.scrollLeft);
 			setScrollLeftMax(carouselRef.current.scrollLeftMax);
-			console.log(scrollLeft, scrollLeftMax);
 		}
 	};
 	const arrowHandle = (

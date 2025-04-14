@@ -14,5 +14,6 @@ export default [
 		]),
 
 		route("search", "routes/search.tsx"),
+		route("results", "routes/results.tsx"),
 	]),
 ] satisfies RouteConfig;
