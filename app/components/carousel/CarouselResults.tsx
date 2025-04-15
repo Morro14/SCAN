@@ -4,18 +4,15 @@ import { useEffect, useRef, useState } from "react";
 
 export default function CarouselResults() {
 	const [pos, setPos] = useState<number>(0);
-	const [offSet, setOffSet] = useState<number | undefined>(0);
 	const [containerW, setContainerW] = useState<number | undefined>(0);
 	const [innerWidth, setInnerWidth] = useState<number | undefined>(0);
-	const [innerWidthLeft, setInnerWidthLeft] = useState<number | undefined>(0);
 
 	const innerRef = useRef<null | HTMLDivElement>(null);
 	const containerRef = useRef<null | HTMLDivElement>(null);
 	useEffect(() => {
-		setOffSet(innerRef.current?.offsetLeft);
 		setContainerW(containerRef.current?.offsetWidth);
 		setInnerWidth(innerRef.current?.offsetWidth);
-	}, [innerRef, setOffSet]);
+	}, [innerRef]);
 	const card = (
 		<div className="flex flex-col justify-between items-center pt-[16px] pb-[16px] text-lg font-[400] w-[137px] border-r-2 border-inactive">
 			<div>10.09.2024</div>
@@ -33,20 +30,19 @@ export default function CarouselResults() {
 		containerEl: React.RefObject<null | HTMLDivElement>
 	) {
 		const stepW = containerW;
-
-		if (innerWidth + pos - stepW <= stepW && step < 0) {
+		if (innerWidth && stepW && innerWidth + pos - stepW <= stepW && step < 0) {
 			if (pos !== -innerWidth + stepW) {
 				setPos(-innerWidth + stepW);
 			}
-		} else if (step < 0) {
+		} else if (stepW && step < 0) {
 			setPos(pos - stepW);
 		}
-		if (step > 0 && Math.abs(pos) <= stepW) {
+		if (stepW && step > 0 && Math.abs(pos) <= stepW) {
 			if (pos !== 0) {
 				console.log("cond 2 - 1");
 				setPos(0);
 			}
-		} else if (step > 0) {
+		} else if (stepW && step > 0) {
 			setPos(pos + stepW);
 		}
 	}
@@ -70,7 +66,7 @@ export default function CarouselResults() {
 					ref={containerRef}
 				>
 					<div
-						className="relative flex flex-row h-[158px] w-[3000px]"
+						className="relative flex flex-row h-[158px] w-[3000px] transition-[left] duration-300"
 						ref={innerRef}
 						style={{ left: pos }}
 					>
