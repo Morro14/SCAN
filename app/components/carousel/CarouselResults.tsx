@@ -47,7 +47,7 @@ export default function CarouselResults() {
 		}
 	}
 	return (
-		<div className="flex flex-row items-center mt-[27px]">
+		<div className="flex flex-row items-center justify-center mt-[27px]">
 			<CarouselLeftArrow
 				func={arrowFunc}
 				element={innerRef}
@@ -62,7 +62,7 @@ export default function CarouselResults() {
 					<div>Риски</div>
 				</div>
 				<div
-					className="overflow-clip max-w-[1197px]"
+					className=" flex overflow-clip max-w-[1120px]"
 					ref={containerRef}
 				>
 					<div

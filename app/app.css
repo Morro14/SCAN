@@ -1,45 +1,43 @@
 @import "tailwindcss";
 
 @font-face {
-	font-family: "Ferry Black";
-	src: url("./fonts/ferry_black.otf") format("opentype");
-	font-weight: bold;
-	font-style: normal;
+  font-family: "Ferry Black";
+  src: url("./fonts/ferry_black.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
 }
 
 @theme {
-	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-	--font-ferry: "Ferry Black";
-	--color-viridian-500: #029491;
-	--color-orange-501: #ffb64f;
-	--color-sky-501: #7ce3e1;
-	--color-blue-501: #5970ff;
-	--color-inactive: #949494;
-	--main-height: calc(100vh - 348px);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-ferry: "Ferry Black";
+  --color-viridian-500: #029491;
+  --color-orange-501: #ffb64f;
+  --color-sky-501: #7ce3e1;
+  --color-blue-501: #5970ff;
+  --color-inactive: #949494;
+  --main-height: calc(100vh - 348px);
 }
 
 html,
 body {
-	@apply bg-white dark:bg-gray-950;
+  @apply bg-white dark:bg-gray-950;
 
-	@media (prefers-color-scheme: dark) {
-		color-scheme: dark;
-	}
-
-	@apply h-full;
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
 }
 .btn {
-	@apply hover:cursor-pointer;
+  @apply hover:cursor-pointer rounded-[5px];
 }
 
 .black {
-	font-family: "Ferry Black";
+  font-family: "Ferry Black";
 }
 
 .main-headline-2 {
-	@apply font-ferry text-[45px] mt-[109px] mb-[50px];
+  @apply font-ferry text-[45px] mt-[109px] mb-[50px];
 }
 .shadowed {
-	@apply shadow-[0_0_18px_0] shadow-[#00000033];
+  @apply shadow-[0_0_18px_0] shadow-[#00000033];
 }

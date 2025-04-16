@@ -2,7 +2,7 @@ import logo from "../media/footer-logo.svg";
 
 export default function Footer() {
 	return (
-		<div className="flex flex-row justify-between h-[143px] bg-viridian-500 mt-[118px]">
+		<footer className="flex flex-row justify-between h-[143px] bg-viridian-500">
 			<img
 				src={logo}
 				alt=""
@@ -20,6 +20,6 @@ export default function Footer() {
 					Copyright. 2022
 				</div>
 			</div>
-		</div>
+		</footer>
 	);
 }

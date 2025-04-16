@@ -2,12 +2,13 @@ import iconBeginner from "../media/tariff-beginner-icon.svg";
 import iconPro from "../media/tariff-pro-icon.svg";
 import iconBuisness from "../media/tariff-buisness-icon.svg";
 import tick from "../media/tick.svg";
-
+import { useNavigate } from "react-router";
 export default function TarrifCard({
 	category,
 }: {
 	category: "beginner" | "pro" | "buisness";
 }) {
+	const nav = useNavigate()
 	const variables = {
 		beginner: {
 			color: "bg-orange-501",
@@ -140,7 +141,7 @@ export default function TarrifCard({
 					</div>
 				</div>
 
-				<button className="w-[355px] h-[59px] bg-blue-501 rounded-[5px] text-xl text-white mt-[55px]">
+				<button  className="btn w-[355px] h-[59px] bg-blue-501 rounded-[5px] text-xl text-white mt-[55px]">
 					Подробнее
 				</button>
 			</div>

@@ -51,7 +51,7 @@ export default function CustomCarousel() {
 	}
 
 	return (
-		<div className="flex flex-row items-center">
+		<div className="flex flex-row items-center ">
 			<CarouselLeftArrow
 				func={arrowHandle}
 				step={-430}

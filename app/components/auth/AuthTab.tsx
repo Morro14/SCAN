@@ -11,7 +11,6 @@ export default function AuthTab() {
 	};
 	const tabStyleActive = " border-viridian-500 text-viridian-500";
 	const tabStyleNonactive = " border-[#C7C7C7] text-[#C7C7C7]";
-	console.log(path);
 	return (
 		<div className="flex flex-row justify-between">
 			<button

@@ -11,6 +11,9 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import axios from "axios";
+
+export const apiURL = 'https://gateway.scan-interfax.ru/api/v1/'
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -26,6 +29,19 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+	axios.interceptors.request.use(
+		
+				(config) => {
+	
+					config.headers["Authorization"] = `Bearer ${sessionStorage.getItem('token')}`
+					config.headers["Content-Type"] = 'application/json'
+					config.headers["Accept"] = 'application/json'
+				return config
+				}, (error) => {
+					return Promise.reject(error)
+				}
+				
+			)
 	return (
 		<html lang="en">
 			<head>

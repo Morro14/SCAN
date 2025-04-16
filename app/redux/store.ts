@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import setValid from "./validateSlice";
+import setUserInfo from "./userInfoSlice";
 
 export const store = configureStore({
-	reducer: {
-		auth: authReducer,
-		validate: setValid,
-	},
+  reducer: {
+    auth: authReducer,
+    validate: setValid,
+    userInfo: setUserInfo,
+  },
 });
 
 // Infer the `RootState`,  `AppDispatch`, and `AppStore` types from the store itself

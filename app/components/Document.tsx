@@ -33,8 +33,8 @@ export default function DocumentCard({
 				математическую модель для их анализа, тестирует ее и презентует готовое
 				решение бизнесу.
 			</div>
-			<div className="flex flex-row mt-[32px]">
-				<button className="w-[223px] h-[47px] rouned-[5px] bg-[#7CE3E1]">
+			<div className="flex flex-row mt-[32px] justify-between items-end">
+				<button className="btn w-[223px] h-[47px] rounded-[5px] bg-[#7CE3E1]">
 					Читать в источнике
 				</button>
 				<div className="text-inactive rounded-[5px]">3 233 слова</div>
