@@ -1,10 +1,10 @@
 import axios from "axios";
 import { apiURL } from "~/root";
+import type { HistogramsRequestParams } from "~/entities/entities";
 
-export default async function loginReq(username: string, password: string) {
-  const data = { login: username, password: password };
+export default async function getHistograms(data: HistogramsRequestParams) {
   const response = await axios
-    .post(apiURL + "account/login", data)
+    .post(apiURL + "objectsearch/histograms", data)
     .then((r) => {
       console.log(r);
       return r;

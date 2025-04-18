@@ -7,7 +7,6 @@ import { Navigate } from "react-router";
 
 export default function SignIn() {
   const context = useGlobalContext();
-  console.log(context?.auth);
   return !context?.auth ? (
     <div>
       <SignInForm></SignInForm>

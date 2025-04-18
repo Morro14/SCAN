@@ -18,7 +18,6 @@ export default function Header() {
 
     context?.setAuth(null);
     nav("");
-    console.log(sessionStorage.getItem("token"));
   }
 
   const loginButtonHandle = () => {
@@ -52,15 +51,25 @@ export default function Header() {
       <div className="h-[32px] w-[32px] bg-gray-300 rounded-full ml-[4px]"></div>
     </div>
   );
-
+  const loadingEl = (
+    <div className="flex items-start mr-[60px] justify-end w-[240px]">
+      <div className="flex flex-col items-end">
+        <div className="w-[72px] h-[20px] bg-gray-950/40"></div>
+        <div className="w-[28px] h-[15px] bg-gray-950/40"></div>
+      </div>
+      <div className="h-[32px] w-[32px] bg-gray-300 rounded-full ml-[4px]"></div>
+    </div>
+  );
   let authGroup = <></>;
   let infoTab = <></>;
   if (context?.auth) {
     authGroup = profileGroup;
     infoTab = <HeaderInfo></HeaderInfo>;
-  } else {
+  } else if (!context?.auth) {
     authGroup = loginGroup;
     infoTab = <></>;
+  } else if (context.auth === "loading") {
+    authGroup = loadingEl;
   }
   return (
     <>

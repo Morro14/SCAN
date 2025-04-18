@@ -6,6 +6,8 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { useGlobalContext } from "../ContextProvider";
 import loginReq from "~/requests/login";
+import { selectToken } from "~/redux/authSlice";
+import { useAppDispatch, useAppSelector } from "~/redux/hooks";
 
 export default function SignInForm() {
   // TODO empty fields check
@@ -13,18 +15,18 @@ export default function SignInForm() {
 
   const methods = useForm();
   const context = useGlobalContext();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const nav = useNavigate();
 
   const onSubmit = methods.handleSubmit(async (formData) => {
     // TODO auth errors handle
     const response = await loginReq(formData.username, formData.password);
-    console.log(response);
     if (response.status === 200) {
       sessionStorage.setItem("token", response.data.accessToken);
       sessionStorage.setItem("expire", response.data.expire);
       sessionStorage.setItem("username", formData.username);
-      context?.setAuth(response.data.accessToken);
+
+      context?.setAuth(true);
       nav("/search");
     }
   });
@@ -37,9 +39,7 @@ export default function SignInForm() {
       buttonOpacity = " opacity-50";
       // buttonFunc = () => {};
     }
-  } catch (error) {
-    console.log("No Refs");
-  }
+  } catch (error) {}
 
   return (
     <div>

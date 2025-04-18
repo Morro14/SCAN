@@ -11,12 +11,14 @@ export default function HeaderInfo() {
 
   async function getUserInfo_() {
     const data = await getUserInfo();
-    setUserInfo({
-      count: data.eventFiltersInfo.usedCompanyCount,
-      limit: data.eventFiltersInfo.companyLimit,
-      actualData: true,
-    });
-    setLoading(false);
+    if (data) {
+      setUserInfo({
+        count: data.eventFiltersInfo.usedCompanyCount,
+        limit: data.eventFiltersInfo.companyLimit,
+        actualData: true,
+      });
+      setLoading(false);
+    }
   }
 
   if (!userInfo) {
