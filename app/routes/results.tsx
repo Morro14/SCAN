@@ -2,17 +2,43 @@ import CarouselResults from "~/components/carousel/CarouselResults";
 import img1 from "../media/results-img-1.svg";
 import DocumentCard from "~/components/Document";
 import { useState } from "react";
-
 import { useGlobalContext } from "~/components/ContextProvider";
+import getSearchObjects from "~/requests/searchObjects";
+import getDocuments from "~/requests/documents";
+import type { HistogramsRequestParams } from "~/entities/entities";
+
 export default function Results() {
   const [showCount, setShowCount] = useState(2);
+  const [docsData, setDocsData] = useState<null | any>(null);
   const context = useGlobalContext();
   let totalDocumets = [] as Array<{ date: string; value: number }>;
   let riskFactors = [] as Array<{ date: string; value: number }>;
+
   if (context?.histogramData) {
+    console.log("hist", context?.histogramData);
     totalDocumets = context?.histogramData[0].data;
     riskFactors = context.histogramData[1].data;
   }
+  //   let docArray = []
+  async function getData() {
+    let responseObj: any = "";
+    if (context?.searchRequestData && !docsData) {
+      responseObj = await getSearchObjects(
+        context?.searchRequestData as HistogramsRequestParams
+      );
+    }
+    if (responseObj.status === 200) {
+      const formatData = responseObj.data.items.map((el: any) => {
+        return el.encodedId;
+      });
+      const responseDocs = await getDocuments({ ids: formatData });
+      if (responseDocs.status === 200) {
+        setDocsData(responseDocs.data);
+      }
+    }
+  }
+
+  getData();
 
   let histArray: Array<{ date: string; total: number; risks: number }> = [];
   totalDocumets.forEach((e) => {
@@ -27,24 +53,30 @@ export default function Results() {
     setShowCount(showCount + 2);
   }
   const doc = (
-    <DocumentCard
-      date="15.10.2021"
-      title="Работа в Data Science в 2022 году: тренды, навыки и обзор специализаций"
-      tags={["Технические новости"]}
-      img={""}
-      text="Кто такой Data Scientist и чем он занимается?
-Data Scientist — это специалист, который работает с большими массивами данных, чтобы с их помощью решить задачи бизнеса. Простой пример использования больших данных и искусственного интеллекта — умные ленты в социальных сетях. На основе ваших просмотров и лайков алгоритм выдает рекомендации с контентом, который может быть вам интересен. Эту модель создал и обучил дата-сайентист, и скорее всего, не один.
+    date: string,
+    title: string,
+    tags: Array<any>,
+    img: string,
+    text: string,
+    source: { name: string; url: string }
+  ) => {
+    return (
+      <DocumentCard
+        date={date}
+        title={title}
+        tags={tags}
+        img={""}
+        text={text}
+        source={{ name: source.name, url: source.url }}
+      ></DocumentCard>
+    );
+  };
 
-В небольших компаниях и стартапах дата-сайентист делает все: собирает и очищает данные, создает математическую модель для их анализа, тестирует ее и презентует готовое решение бизнесу"
-      source={{ name: "VC.RU", url: "url" }}
-    ></DocumentCard>
-  );
-
-  let docArray = [];
-  for (let i = 0; i < docCount; i++) {
-    docArray.push(doc);
-  }
-
+  //   let docArray = [];
+  //   for (let i = 0; i < docCount; i++) {
+  //     docArray.push(doc);
+  //   }
+  console.log("docsData", docsData);
   return (
     <div>
       <div className="flex justify-between max-h-[376px]">
@@ -72,9 +104,31 @@ Data Scientist — это специалист, который работает 
       <div className="mt-[107px]">
         <div className="font-ferry text-[30px]">Список документов</div>
         <div className="grid grid-cols-2 mt-[58px] justify-between gap-y-[38px]">
-          {docArray.slice(0, showCount).map(() => {
-            return doc;
-          })}
+          {docsData
+            ? docsData.map((el: any) => {
+                const formattedDate = new Date(
+                  el.ok.content.markup.issueDate
+                ).toLocaleDateString();
+                const docEnt = {
+                  date: formattedDate,
+                  title: el.ok.title.text,
+                  tags: [
+                    el.ok.attributes.isTechNews ? "Технические новости" : "",
+                  ],
+                  text: el.ok.content.markup,
+                  source: { name: el.ok.source.name, url: el.ok.url },
+                  img: "",
+                };
+                return doc(
+                  docEnt.date,
+                  docEnt.title,
+                  docEnt.tags,
+                  docEnt.img,
+                  docEnt.text,
+                  docEnt.source
+                );
+              })
+            : ""}
         </div>
       </div>
       <div className="flex justify-center">

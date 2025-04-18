@@ -52,3 +52,7 @@ export type HistogramData = Array<{
   data: Array<{ date: string; value: number }>;
   histogramType: "totalDocuments" | "riskFactiors";
 }>;
+
+export interface DocumentsRequest {
+  ids: Array<string>;
+}

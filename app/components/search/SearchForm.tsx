@@ -21,6 +21,7 @@ export default function SearchForm() {
   const context = useGlobalContext();
   const nav = useNavigate();
   if (context) {
+    // TODO button
     if (!Object.values(context.searchData).includes(false || true)) {
       btnOpacity = " opacity-100";
       handleSubmit = methods.handleSubmit(async (formData) => {
@@ -62,13 +63,14 @@ export default function SearchForm() {
             },
           },
         };
-        console.log("data", data);
+
         const response = await getHistograms(data);
         if (response.status === 200) {
           sessionStorage.setItem(
             "histograms",
             JSON.stringify(response.data.data)
           );
+          sessionStorage.setItem("searchRequestData", JSON.stringify(data));
           context.setHistogramData(response.data.data);
           console.log("response", response);
           nav("/results");
