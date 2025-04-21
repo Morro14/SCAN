@@ -4,7 +4,7 @@ import type { RootState } from "./store";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    username: null,
+    username: "123",
     token: null,
     expire: null,
   },
@@ -16,6 +16,7 @@ const authSlice = createSlice({
     },
   },
 });
+export const selectUsername = (state: RootState) => state.auth.username;
 export const selectToken = (state: RootState) => state.auth.token;
 export const { authReducer } = authSlice.actions;
 

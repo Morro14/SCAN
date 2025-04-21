@@ -1,6 +1,7 @@
 import CarouselRightArrow from "./CarouselRightArrow";
 import CarouselLeftArrow from "./CarouselLeftArrow";
 import { useEffect, useRef, useState, type RefObject } from "react";
+import formatDate from "~/utils/formatDate";
 
 export default function CarouselResults({
   data,
@@ -15,22 +16,15 @@ export default function CarouselResults({
   useEffect(() => {
     setRefs({ ...{ innerRef: innerRef, containerRef: containerRef } });
   }, [innerRef, containerRef, setRefs]);
-
+  let cardCount = 0;
   const card = (cardData: { date: string; total: number; risks: number }) => {
     const dateF = new Date(cardData.date);
-
-    const day =
-      dateF.getDate().toString().length === 1
-        ? "0" + dateF.getDate().toString()
-        : dateF.getDate().toString();
-    const month =
-      (dateF.getMonth() + 1).toString().length === 1
-        ? "0" + (dateF.getMonth() + 1).toString()
-        : (dateF.getMonth() + 1).toString();
-
-    const dateString = day + "." + month + "." + dateF.getFullYear();
+    const dateString = formatDate(dateF);
     return (
-      <div className="flex flex-col h-[100%] justify-between items-center pt-[16px] pb-[16px] text-lg font-[400] w-[135px]">
+      <div
+        className="flex flex-col h-[100%] justify-between items-center pt-[16px] pb-[16px] text-lg font-[400] w-[135px]"
+        key={"hist-card-" + cardCount}
+      >
         <div>{dateString}</div>
         <div>{cardData.total}</div>
         <div>{cardData.risks}</div>
@@ -74,7 +68,7 @@ export default function CarouselResults({
         secondEl={containerRef}
       ></CarouselLeftArrow>
       <div className="flex border-2 border-viridian-500 rounded-[10px]">
-        <div className="flex flex-col justify-between items-center pt-[16px] pb-[16px] bg-viridian-500 w-[133px] rounded-l-[10px] text-white font-[500] text-xl ">
+        <div className="relative flex flex-col justify-between items-center pt-[16px] pb-[16px] bg-viridian-500 w-[133px] rounded-l-[10px] text-white font-[500] text-xl ">
           <div>Период</div>
           <div>Всего</div>
           <div>Риски</div>
@@ -88,10 +82,16 @@ export default function CarouselResults({
             {data.map((el) => {
               elCount += 1;
               return (
-                <div className="flex flex-row items-center">
+                <div
+                  className="flex flex-row items-center"
+                  key={"hist-card-container-" + elCount}
+                >
                   {card({ date: el.date, total: el.total, risks: el.risks })}
                   {elCount !== data.length ? (
-                    <div className="w-[2px] h-[124px] bg-inactive/40"></div>
+                    <div
+                      className="w-[2px] h-[124px] bg-inactive/40"
+                      key={"hist-card-line-" + elCount}
+                    ></div>
                   ) : (
                     ""
                   )}

@@ -1,17 +1,7 @@
-// class eventFiltersInfo {
-//     usedCompanyCount: number
-//     companyLimit:number
-//     constructor(usedCompanyCount:number, companyLimit:number) {
-//         this.usedCompanyCount = usedCompanyCount
-//         this.companyLimit = companyLimit
-//     }
-// }
 export interface eventFiltersInfo {
   sedCompanyCount: number;
   companyLimit: number;
 }
-
-let regexDate = /20\d\d-[0-1]((?<=0)\d|(?<=1)[0-2])-[0-3]\d/;
 
 export interface HistogramsRequestParams {
   intervalType: "month";

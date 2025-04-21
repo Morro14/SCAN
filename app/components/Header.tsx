@@ -4,28 +4,40 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import HeaderInfo from "./HeaderInfo";
 import { useGlobalContext } from "./ContextProvider";
+import { useAppSelector, useAppDispatch } from "~/redux/hooks";
+import { selectToken, authReducer } from "~/redux/authSlice";
 
 export default function Header() {
-  const [username, setUsername] = useState<null | string>();
+  const auth = useAppSelector(selectToken);
   const context = useGlobalContext();
-  useEffect(() => {
-    setUsername(sessionStorage.getItem("username"));
-  });
+  const [username, setUsername] = useState<null | string>(null);
+  const [loading, setLaoding] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (!username && sessionStorage?.getItem("username")) {
+      setUsername(sessionStorage?.getItem("username"));
+      setLaoding(false);
+    }
+    setLaoding(false);
+  });
+  // const username = context?.username;
   const nav = useNavigate();
   function handleLogout() {
     sessionStorage.clear();
-
-    context?.setAuth(null);
+    setLaoding(true);
+    dispatch(authReducer({ token: null }));
     nav("");
   }
 
   const loginButtonHandle = () => {
     nav("signin");
   };
-
+  const placeholder = (
+    <div className="flex grow bg-gray-300 rounded-[5px]"></div>
+  );
   const loginGroup = (
-    <div className="flex flex-row items-center mr-[60px] ">
+    <div className="flex flex-row items-center ">
       <div className="text-[14px] text-gray-950/40">Зарегистрироваться</div>
       <div className="w-[2px] h-[26px] bg-orange-501/60 ml-[18px] mr-[20px]"></div>
       <button
@@ -38,7 +50,7 @@ export default function Header() {
   );
 
   const profileGroup = (
-    <div className="flex items-start mr-[60px] justify-end w-[240px]">
+    <div className="flex items-start justify-end w-[240px]">
       <div className="flex flex-col items-end">
         <div className="text-sm">{username}</div>
         <div
@@ -51,40 +63,39 @@ export default function Header() {
       <div className="h-[32px] w-[32px] bg-gray-300 rounded-full ml-[4px]"></div>
     </div>
   );
-  const loadingEl = (
-    <div className="flex items-start mr-[60px] justify-end w-[240px]">
-      <div className="flex flex-col items-end">
-        <div className="w-[72px] h-[20px] bg-gray-950/40"></div>
-        <div className="w-[28px] h-[15px] bg-gray-950/40"></div>
-      </div>
-      <div className="h-[32px] w-[32px] bg-gray-300 rounded-full ml-[4px]"></div>
-    </div>
-  );
-  let authGroup = <></>;
-  let infoTab = <></>;
-  if (context?.auth) {
-    authGroup = profileGroup;
-    infoTab = <HeaderInfo></HeaderInfo>;
-  } else if (!context?.auth) {
-    authGroup = loginGroup;
-    infoTab = <></>;
-  } else if (context.auth === "loading") {
-    authGroup = loadingEl;
-  }
+
   return (
     <>
       <header className="flex flex-row items-center justify-between h-[93px] bg-white">
         <div className="flex content-center ml-[60px] w-[141px]">
           <img src={imgURL} className="object-contain"></img>
         </div>
-        <div className="flex content-center justify-between w-[236px] h-fit text-[14px]">
-          <NavLink to="">Главная</NavLink>
-          <NavLink to="">Тарифы</NavLink>
-          <NavLink to="">FAQ</NavLink>
-        </div>
-        <div className="flex flex-row items-center">
-          {infoTab}
-          {authGroup}
+        <div className="flex flex-row justify-between w-[778px] items-center mr-[60px]">
+          <div className="flex content-center justify-between w-[236px] h-fit text-[14px]">
+            <NavLink to="" className="hover:underline">
+              Главная
+            </NavLink>
+            <NavLink to="" className="hover:underline">
+              Тарифы
+            </NavLink>
+            <NavLink to="" className="hover:underline">
+              FAQ
+            </NavLink>
+          </div>
+          <div className="flex flex-row justify-end w-[430px] items-center">
+            {auth && !loading ? (
+              <HeaderInfo></HeaderInfo>
+            ) : loading ? (
+              placeholder
+            ) : (
+              ""
+            )}
+            {auth && !loading
+              ? profileGroup
+              : loading
+              ? placeholder
+              : loginGroup}
+          </div>
         </div>
       </header>
     </>

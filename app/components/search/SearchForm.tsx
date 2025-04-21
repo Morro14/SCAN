@@ -22,61 +22,57 @@ export default function SearchForm() {
   const nav = useNavigate();
   if (context) {
     // TODO button
-    if (!Object.values(context.searchData).includes(false || true)) {
-      btnOpacity = " opacity-100";
-      handleSubmit = methods.handleSubmit(async (formData) => {
-        console.log(formData);
+    btnOpacity = " opacity-100";
+    handleSubmit = methods.handleSubmit(async (formData) => {
+      const data: HistogramsRequestParams = {
+        intervalType: "month",
+        histogramTypes: ["totalDocuments", "riskFactors"],
 
-        const data: HistogramsRequestParams = {
-          intervalType: "month",
-          histogramTypes: ["totalDocuments", "riskFactors"],
+        similarMode: "none",
+        limit: formData.limit,
+        sortType: "issueDate",
+        sortDirectionType: "desc",
+        tonality: formData.tonality,
+        onlyMainRole: formData["3"],
+        onlyWithRiskFactors: formData["4"],
+        attributeFilters: {
+          excludeTechNews: formData["5"],
+          excludeAnnouncements: formData["6"],
+          excludeDigests: formData["7"],
+        },
 
-          similarMode: "none",
-          limit: formData.limit,
-          sortType: "issueDate",
-          sortDirectionType: "desc",
-          tonality: formData.tonality,
-          onlyMainRole: formData["3"],
-          onlyWithRiskFactors: formData["4"],
-          attributeFilters: {
-            excludeTechNews: formData["5"],
-            excludeAnnouncements: formData["6"],
-            excludeDigests: formData["7"],
+        issueDateInterval: {
+          startDate: formData.dateStart,
+          endDate: formData.dateEnd,
+        },
+        searchContext: {
+          targetSearchEntitiesContext: {
+            targetSearchEntities: [
+              {
+                type: "company",
+                isBuisnessNews: formData["2"],
+                sparkId: null,
+                entityId: null,
+                inn: formData.inn,
+                maxFulness: formData["1"],
+              },
+            ],
           },
+        },
+      };
 
-          issueDateInterval: {
-            startDate: formData.dateStart,
-            endDate: formData.dateEnd,
-          },
-          searchContext: {
-            targetSearchEntitiesContext: {
-              targetSearchEntities: [
-                {
-                  type: "company",
-                  isBuisnessNews: formData["2"],
-                  sparkId: null,
-                  entityId: null,
-                  inn: formData.inn,
-                  maxFulness: formData["1"],
-                },
-              ],
-            },
-          },
-        };
-
-        const response = await getHistograms(data);
-        if (response.status === 200) {
-          sessionStorage.setItem(
-            "histograms",
-            JSON.stringify(response.data.data)
-          );
-          sessionStorage.setItem("searchRequestData", JSON.stringify(data));
-          context.setHistogramData(response.data.data);
-          console.log("response", response);
-          nav("/results");
-        }
-      });
-    }
+      const response = await getHistograms(data);
+      if (response.status === 200) {
+        sessionStorage.setItem(
+          "histograms",
+          JSON.stringify(response.data.data)
+        );
+        sessionStorage.setItem("searchRequestData", JSON.stringify(data));
+        context.setHistogramData(response.data.data);
+        context.setSearchRequestData(data);
+        nav("/results");
+      }
+    });
   }
 
   return (
@@ -99,8 +95,14 @@ export default function SearchForm() {
                   label="Тональность"
                   selectOpt={[
                     { label: "Любая", value: "any" },
-                    { label: "Позитивная", value: "negative" },
-                    { label: "Негативная", value: "positive" },
+                    {
+                      label: "Позитивная",
+                      value: "negative",
+                    },
+                    {
+                      label: "Негативная",
+                      value: "positive",
+                    },
                   ]}
                 ></SearchSelect>
               </div>

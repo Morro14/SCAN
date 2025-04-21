@@ -1,45 +1,56 @@
 import { Form } from "react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "./Input";
-import { loginValidator } from "./validators";
+import { loginValidator } from "../form/validators";
 import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
 import { useGlobalContext } from "../ContextProvider";
 import loginReq from "~/requests/login";
-import { selectToken } from "~/redux/authSlice";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
+import { useState } from "react";
+import { useAppDispatch } from "~/redux/hooks";
+import { authReducer } from "~/redux/authSlice";
 
 export default function SignInForm() {
   // TODO empty fields check
-  let buttonOpacity = " opacity-50";
+  let buttonOpacity = " opacity-50 hover:opacity-100";
 
   const methods = useForm();
   const context = useGlobalContext();
-  const dispatch = useAppDispatch();
   const nav = useNavigate();
-
+  const [credsInvalid, setCredsInvalid] = useState(false);
+  const dispatch = useAppDispatch();
   const onSubmit = methods.handleSubmit(async (formData) => {
     // TODO auth errors handle
     const response = await loginReq(formData.username, formData.password);
     if (response.status === 200) {
       sessionStorage.setItem("token", response.data.accessToken);
-      sessionStorage.setItem("expire", response.data.expire);
+      // sessionStorage.setItem("expire", response.data.expire);
       sessionStorage.setItem("username", formData.username);
-
-      context?.setAuth(true);
-      nav("/search");
+      // authContext?.setAuth(true);
+      dispatch(
+        authReducer({
+          token: response.data.accessToken,
+        })
+      );
+      nav("/main/auth");
+    } else {
+      setCredsInvalid(true);
     }
   });
-  let buttonFunc = onSubmit;
+
+  let buttonFunc: (
+    e?: React.BaseSyntheticEvent<object, object, any>
+  ) => Promise<void> | void = onSubmit;
   try {
-    if (context?.authData.login && context?.authData.password) {
+    if (context?.authData.username && context?.authData.password) {
       buttonOpacity = "";
       buttonFunc = onSubmit;
     } else {
-      buttonOpacity = " opacity-50";
-      // buttonFunc = () => {};
+      buttonOpacity = " opacity-50 hover:opacity-50!";
+      buttonFunc = () => {};
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 
   return (
     <div>
@@ -51,6 +62,7 @@ export default function SignInForm() {
               label="Логин или номер телефона:"
               placeholder=""
               validation={loginValidator}
+              credsInvalid={credsInvalid}
             ></Input>
           </div>
           <div>
@@ -59,6 +71,7 @@ export default function SignInForm() {
               label="Пароль:"
               placeholder=""
               validation={loginValidator}
+              credsInvalid={credsInvalid}
             ></Input>
           </div>
           <button

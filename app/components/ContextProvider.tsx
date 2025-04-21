@@ -4,11 +4,15 @@ import type {
   HistogramData,
   HistogramsRequestParams,
 } from "~/entities/entities";
+import { authReducer, selectToken } from "~/redux/authSlice";
+import { useAppDispatch, useAppSelector } from "~/redux/hooks";
 
 export type GlobalContext = {
-  authData: { login: boolean; password: boolean };
+  username: string | null;
+  setUsername: React.Dispatch<React.SetStateAction<null | string>>;
+  authData: { username: boolean; password: boolean };
   setAuthData: React.Dispatch<
-    React.SetStateAction<{ login: boolean; password: boolean }>
+    React.SetStateAction<{ username: boolean; password: boolean }>
   >;
   searchData: {
     inn: boolean;
@@ -24,8 +28,8 @@ export type GlobalContext = {
       dateEnd: boolean;
     }>
   >;
-  auth: boolean | null | "loading";
-  setAuth: React.Dispatch<React.SetStateAction<boolean | null | "loading">>;
+  auth: boolean | null;
+  setAuth: React.Dispatch<React.SetStateAction<boolean | null>>;
   histogramData: HistogramData | null;
   setHistogramData: React.Dispatch<React.SetStateAction<null | HistogramData>>;
   searchRequestData: HistogramsRequestParams | null;
@@ -37,7 +41,11 @@ export type GlobalContext = {
 const GlobalContext = createContext<GlobalContext | null>(null);
 
 export default function CotnextProvider({ children }: any) {
-  const [authData, setAuthData] = useState({ login: false, password: false });
+  const authState = useAppSelector(selectToken);
+  const [authData, setAuthData] = useState({
+    username: false,
+    password: false,
+  });
   const [searchData, setSearchData] = useState({
     inn: false,
     limit: false,
@@ -46,35 +54,26 @@ export default function CotnextProvider({ children }: any) {
   });
   const [searchRequestData, setSearchRequestData] =
     useState<HistogramsRequestParams | null>(null);
-  //   const token = useAppSelector(selectToken);
-  const [auth, setAuth] = useState<boolean | null | "loading">("loading");
+  const [auth, setAuth] = useState<boolean | null>(false);
   const [histogramData, setHistogramData] = useState<null | HistogramData>(
     null
   );
-
+  const [username, setUsername] = useState<null | string>(null);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    console.log("provider");
-    setAuth(sessionStorage?.getItem("token") ? true : null);
-    if (!histogramData && sessionStorage?.getItem("histograms")) {
-      const histParse = JSON.parse(
-        sessionStorage?.getItem("histograms") as string
-      ) as HistogramData;
-      setHistogramData(histParse);
+    if (
+      !authState &&
+      !sessionStorage.getItem("token") &&
+      (sessionStorage.getItem("username") ||
+        sessionStorage.getItem("histograms") ||
+        sessionStorage.getItem("searchRequestData"))
+    ) {
+      sessionStorage.clear();
     }
-    if (!searchRequestData && sessionStorage?.getItem("searchRequestData")) {
-      const searchReqParse = JSON.parse(
-        sessionStorage?.getItem("searchRequestData") as string
-      ) as HistogramsRequestParams;
-      setSearchRequestData(searchReqParse);
+    if (!authState && sessionStorage.getItem("token")) {
+      dispatch(authReducer({ token: sessionStorage.getItem("token") }));
     }
-  }, [
-    setAuth,
-    setHistogramData,
-    histogramData,
-    searchRequestData,
-    setSearchRequestData,
-  ]);
-
+  }, [authState]);
   return (
     <>
       <GlobalContext.Provider
@@ -89,6 +88,8 @@ export default function CotnextProvider({ children }: any) {
           setHistogramData,
           searchRequestData,
           setSearchRequestData,
+          username,
+          setUsername,
         }}
       >
         {children}

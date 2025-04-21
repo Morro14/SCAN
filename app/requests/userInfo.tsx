@@ -6,6 +6,7 @@ export default async function getUserInfo() {
     .get(apiURL + "account/info")
     .then((r) => {
       if (r.status === 200) {
+        console.log(r);
         return r.data;
       }
     })

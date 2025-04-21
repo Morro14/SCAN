@@ -28,7 +28,7 @@ body {
   }
 }
 .btn {
-  @apply hover:cursor-pointer rounded-[5px];
+  @apply hover:cursor-pointer hover:opacity-90 rounded-[5px];
 }
 
 .black {

@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from "react-router";
-import { useGlobalContext } from "../ContextProvider";
+import { useAppSelector } from "~/redux/hooks";
+import { selectToken } from "~/redux/authSlice";
 
 export default function PrivatRoute() {
-  const context = useGlobalContext();
-
-  return context?.auth ? (
+  const auth = useAppSelector(selectToken);
+  return auth ? (
     <>
       <Outlet></Outlet>
     </>

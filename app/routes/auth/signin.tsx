@@ -2,12 +2,13 @@ import SignInForm from "~/components/auth/SignInForm";
 import authYandex from "../../media/auth-yandex.svg";
 import authGoogle from "../../media/auth-google.svg";
 import authFacebook from "../../media/auth-facebook.svg";
-import { useGlobalContext } from "~/components/ContextProvider";
 import { Navigate } from "react-router";
+import { useAppSelector } from "~/redux/hooks";
+import { selectToken } from "~/redux/authSlice";
 
 export default function SignIn() {
-  const context = useGlobalContext();
-  return !context?.auth ? (
+  const auth = useAppSelector(selectToken);
+  return auth ? (
     <div>
       <SignInForm></SignInForm>
       <div className="text-blue-501 underline mt-[10px] text-center">
