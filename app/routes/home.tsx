@@ -4,32 +4,10 @@ import { Outlet } from "react-router";
 import Footer from "~/components/Footer";
 import CotnextProvider from "~/components/ContextProvider";
 import { isRouteErrorResponse, useRouteError } from "react-router";
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-  console.log("error bound", error);
-  if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
-  } else {
-    return <h1>Unknown Error</h1>;
-  }
-}
+import AuthProvider from "~/components/AuthProvider";
+import { useState, useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "~/redux/hooks";
+import { selectAuth, authReducer } from "~/redux/authSlice";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -39,14 +17,41 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home({ children }: { children: React.ReactNode }) {
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector(selectAuth);
+
+  // getting auth info from storage
+  useEffect(() => {
+    if (auth !== "true" && sessionStorage.getItem("token")) {
+      if (sessionStorage.getItem("username")) {
+        dispatch(
+          authReducer({
+            auth: "true",
+            token: sessionStorage.getItem("token"),
+            username: sessionStorage.getItem("username"),
+          })
+        );
+      } else {
+        dispatch(
+          authReducer({ auth: "true", token: sessionStorage.getItem("token") })
+        );
+      }
+    } else if (auth !== "true" && !sessionStorage.getItem("token")) {
+      sessionStorage.clear();
+      dispatch(authReducer({ auth: "false" }));
+    } else if (auth === "true" && !sessionStorage.getItem("username")) {
+      dispatch(authReducer({ username: sessionStorage.getItem("username") }));
+    }
+  }, []);
+
   return (
     <>
       <CotnextProvider>
-        <div className="flex flex-col justify-between items-center h-full bg-gray-100">
-          <div className="flex flex-col max-w-[1440px] min-w-[1440px]">
+        <div className="flex flex-col justify-between items-center min-h-screen bg-gray-100">
+          <div className="flex flex-col max-w-[1440px] min-w-[1440px] min-h-screen">
             <Header></Header>
 
-            <main className="pl-[60px] pr-[60px] bg-white pb-[206px]">
+            <main className="pl-[60px] pr-[60px] bg-white pb-[206px] grow">
               <Outlet></Outlet>
             </main>
             <Footer></Footer>

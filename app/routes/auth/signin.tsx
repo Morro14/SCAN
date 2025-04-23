@@ -2,13 +2,36 @@ import SignInForm from "~/components/auth/SignInForm";
 import authYandex from "../../media/auth-yandex.svg";
 import authGoogle from "../../media/auth-google.svg";
 import authFacebook from "../../media/auth-facebook.svg";
-import { Navigate } from "react-router";
-import { useAppSelector } from "~/redux/hooks";
-import { selectToken } from "~/redux/authSlice";
+import { isRouteErrorResponse, useRouteError } from "react-router";
 
+export function ErrorBoundary() {
+  console.log("inner error boundary");
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1 className="text-xl">
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1 className="text-2xl ">Ошибка</h1>
+        <p>Что-то пошло не так</p>
+        <p>{error.message}</p>
+        {/* <p>The stack trace is:</p> */}
+        {/* <pre>{error.stack}</pre> */}
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
+}
 export default function SignIn() {
-  const auth = useAppSelector(selectToken);
-  return auth ? (
+  return (
     <div>
       <SignInForm></SignInForm>
       <div className="text-blue-501 underline mt-[10px] text-center">
@@ -29,7 +52,5 @@ export default function SignIn() {
         </div>
       </div>
     </div>
-  ) : (
-    <Navigate to={"/search"}></Navigate>
   );
 }

@@ -2,7 +2,6 @@ import CarouselResults from "~/components/carousel/CarouselResults";
 import img1 from "../media/results-img-1.svg";
 import DocumentCard from "~/components/Document";
 import { useEffect, useState } from "react";
-import { useGlobalContext } from "~/components/ContextProvider";
 import getSearchObjects from "~/requests/searchObjects";
 import getDocuments from "~/requests/documents";
 import type {
@@ -13,6 +12,13 @@ import formatDate from "~/utils/formatDate";
 import { isRouteErrorResponse, useRouteError } from "react-router";
 import Spinner from "~/components/util/Spinner";
 import CarouselResultsPlaceholder from "~/components/carousel/CarouselResultsPlaceholder";
+import { useAppDispatch, useAppSelector } from "~/redux/hooks";
+import {
+  selectHistograms,
+  selectSearchParams,
+  setSearchRes,
+} from "~/redux/searchResultsSlice";
+import Button from "~/components/util/Buttons";
 
 export function ErrorBoundary() {
   const error = useRouteError();
@@ -43,49 +49,48 @@ export function ErrorBoundary() {
 export default function Results() {
   const [showCount, setShowCount] = useState(2);
   const [docsData, setDocsData] = useState<null | any>(null);
-  // const [searchRequestData, setSearchRequestData] =
-  //   useState<HistogramsRequestParams | null>(null);
   const [docIDs, setDocIDs] = useState<null | any>(null);
   const [loadDocs, setLoadDocs] = useState<boolean>(false);
-  const context = useGlobalContext();
 
+  const histSlice = useAppSelector(selectHistograms);
+  const searchSlice = useAppSelector(selectSearchParams);
+
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    if (sessionStorage.getItem("histograms") && !context?.histogramData) {
-      context?.setHistogramData(
-        JSON.parse(
-          sessionStorage.getItem("histograms") as string
-        ) as HistogramData
-      );
-    }
     if (
-      sessionStorage.getItem("searchRequestData") &&
-      !context?.searchRequestData
+      histSlice === null &&
+      searchSlice === null &&
+      sessionStorage.getItem("histograms") &&
+      sessionStorage.getItem("searchRequestData")
     ) {
-      context?.setSearchRequestData(
-        JSON.parse(sessionStorage.getItem("searchRequestData") as string)
+      dispatch(
+        setSearchRes({
+          histograms: JSON.parse(
+            sessionStorage.getItem("histograms") as string
+          ) as HistogramData,
+          searchParams: JSON.parse(
+            sessionStorage.getItem("searchRequestData") as string
+          ) as HistogramsRequestParams,
+        })
       );
+    } else if (histSlice && searchSlice && !docsData) {
+      getData();
     }
-  }),
-    [
-      context?.histogramData,
-      context?.searchRequestData,
-      context?.setSearchRequestData,
-      context?.setHistogramData,
-    ];
+  }, [docsData, getData]);
 
   let totalDocumets = [] as Array<{ date: string; value: number }> | null;
   let riskFactors = [] as Array<{ date: string; value: number }> | null;
   let histCount = 0;
-  if (context?.histogramData) {
-    histCount = context?.histogramData[0].data.length;
-    totalDocumets = context?.histogramData
-      ? (context?.histogramData[0].data as Array<{
+  if (histSlice) {
+    histCount = histSlice[0].data.length;
+    totalDocumets = histSlice
+      ? (histSlice[0].data as Array<{
           date: string;
           value: number;
         }>)
       : null;
-    riskFactors = context?.histogramData
-      ? (context?.histogramData[1].data as Array<{
+    riskFactors = histSlice
+      ? (histSlice[1].data as Array<{
           date: string;
           value: number;
         }>)
@@ -94,33 +99,44 @@ export default function Results() {
 
   async function getData() {
     let responseObj: any = "";
-    if (context?.searchRequestData && !docsData) {
-      responseObj = await getSearchObjects(
-        context?.searchRequestData as HistogramsRequestParams
-      );
-    }
+    responseObj = await getSearchObjects(
+      searchSlice as HistogramsRequestParams
+    );
 
     if (responseObj.status === 200) {
       const formatData = responseObj.data.items.map((el: any) => {
         return el.encodedId;
       });
 
-      const responseDocs = await getDocuments({ ids: formatData.slice(0, 2) });
+      const responseDocs = await getDocuments({
+        ids: formatData.length >= 2 ? formatData.slice(0, 2) : formatData,
+      });
       if (responseDocs.status === 200) {
         setDocsData(responseDocs.data);
         setDocIDs(formatData);
       }
     }
   }
-  if (!docsData) {
-    getData();
-  }
+
   async function handleShowMore() {
     setLoadDocs(true);
-    const newDocs = await getDocuments({
-      ids: docIDs.slice(showCount, showCount + 2),
-    });
-    setShowCount(showCount + 2);
+    let plusCount = 0;
+    if (docIDs.length >= showCount + 2) {
+      plusCount = 2;
+    } else {
+      plusCount = docIDs.length - showCount;
+    }
+    let newDocs = [];
+    if (plusCount !== 0) {
+      newDocs = await getDocuments({
+        ids: docIDs.slice(showCount, showCount + plusCount),
+      });
+    } else {
+      return;
+    }
+
+    console.log(docIDs.length, showCount, plusCount);
+    setShowCount(showCount + plusCount);
     setDocsData(docsData.concat(newDocs.data));
     setLoadDocs(false);
   }
@@ -134,9 +150,6 @@ export default function Results() {
     histArray.push({ date: e.date, risks: riskValue, total: e.value });
   });
 
-  // function handleShow() {
-  //   setShowCount(showCount + 2);
-  // }
   let docCount = 0;
   const doc = (
     date: string,
@@ -184,7 +197,7 @@ export default function Results() {
           Найдено {histCount} вариантов
         </div>
       </div>
-      {context?.histogramData ? (
+      {histSlice ? (
         <CarouselResults data={histArray}></CarouselResults>
       ) : (
         <CarouselResultsPlaceholder></CarouselResultsPlaceholder>
@@ -240,12 +253,21 @@ export default function Results() {
         </div>
       </div>
       <div className="flex justify-center">
-        <button
-          className="btn flex justify-center items-center w-[305px] h-[59px] mt-[38px] bg-blue-501 text-[22px] text-white"
-          onClick={handleShowMore}
-        >
-          {loadDocs ? <Spinner></Spinner> : "Показать больше"}
-        </button>
+        {docIDs && docIDs.length > showCount ? (
+          // <button
+          //   className="btn flex justify-center items-center w-[305px] h-[59px] mt-[38px] bg-blue-501 text-[22px] text-white"
+          //   onClick={handleShowMore}
+          // >
+          //   {loadDocs ? <Spinner></Spinner> : "Показать больше"}
+          // </button>
+          <Button
+            onClickFunc={handleShowMore}
+            loadingState={loadDocs}
+            text="Показать больше"
+          ></Button>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

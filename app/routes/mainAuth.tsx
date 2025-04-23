@@ -4,30 +4,22 @@ import img2 from "../media/main-img-2.svg";
 import CustomCarousel from "~/components/carousel/Carousel";
 import { useNavigate } from "react-router";
 import { useAppSelector } from "~/redux/hooks";
-import { selectToken } from "~/redux/authSlice";
+import { selectAuth, selectToken } from "~/redux/authSlice";
+import Button from "~/components/util/Buttons";
+import { useState } from "react";
 
-export default function Main() {
+export default function MainAuth() {
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
-  const handleSearch = () => {
+  const handleSearchBtn = () => {
+    setLoading(true);
     nav("/search");
   };
-  const auth = useAppSelector(selectToken);
-  let userTariff = "";
+  const auth = useAppSelector(selectAuth);
+  console.log("main auth", auth);
 
-  if (auth) {
-    userTariff = "beginner";
-  }
-  let button: any = <></>;
-  if (auth) {
-    button = (
-      <button
-        onClick={handleSearch}
-        className="btn w-[335px] h-[59px] rounded-[5px] bg-blue-501 mt-[70px] text-white"
-      >
-        Запросить данные
-      </button>
-    );
-  }
+  const userTariff = "beginner";
+
   return (
     <div>
       <div className="flex flex-row justify-between mt-[69px]">
@@ -41,8 +33,11 @@ export default function Main() {
             Комплексный анализ публикаций, получение данных <br />в формате PDF
             на электронную почту.
           </div>
-
-          {button}
+          <Button
+            onClickFunc={handleSearchBtn}
+            loadingState={loading}
+            text="Запросить данные"
+          ></Button>
         </div>
 
         <img src={img1} alt="main-img-1" className="w-[629px] h-[593px]" />
@@ -59,11 +54,8 @@ export default function Main() {
             category="beginner"
             active={userTariff === "beginner"}
           ></TarrifCard>
-          <TarrifCard category="pro" active={userTariff === "pro"}></TarrifCard>
-          <TarrifCard
-            category="buisness"
-            active={userTariff === "buisness"}
-          ></TarrifCard>
+          <TarrifCard category="pro" active={false}></TarrifCard>
+          <TarrifCard category="buisness" active={false}></TarrifCard>
         </div>
       </div>
     </div>

@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 .img {
-	@apply absolute hidden pointer-events-none;
+  @apply absolute hidden pointer-events-none;
 }
 .checkbox {
-	@apply absolute h-[20px] w-[20px] border opacity-40 pointer-events-none;
+  @apply absolute h-[20px] w-[20px] border opacity-40 pointer-events-none;
 }
 
 .inpt {
-	@apply absolute opacity-0 cursor-pointer w-[20px] h-[20px];
+  @apply absolute opacity-0 cursor-pointer w-[20px] h-[20px];
 }
 
 .inpt:checked ~ span > div > img {
-	@apply block;
+  @apply block;
 }
 .inpt:checked ~ span > div {
-	@apply block opacity-100;
+  @apply block opacity-100;
 }
 .inpt:checked ~ label {
-	@apply block opacity-100;
+  @apply block opacity-100;
 }
 .checkbox-container > label {
-	@apply opacity-40;
+  @apply opacity-40;
 }

@@ -1,3 +1,4 @@
+import Spinner from "../util/Spinner";
 import { Form } from "react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "./Input";
@@ -17,23 +18,30 @@ export default function SignInForm() {
   const context = useGlobalContext();
   const nav = useNavigate();
   const [credsInvalid, setCredsInvalid] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+
   const onSubmit = methods.handleSubmit(async (formData) => {
     // TODO auth errors handle
+    setLoading(true);
     const response = await loginReq(formData.username, formData.password);
     if (response.status === 200) {
+      console.log(response);
       sessionStorage.setItem("token", response.data.accessToken);
-      // sessionStorage.setItem("expire", response.data.expire);
       sessionStorage.setItem("username", formData.username);
-      // authContext?.setAuth(true);
+
       dispatch(
         authReducer({
           token: response.data.accessToken,
+          auth: "true",
+          username: formData.username,
+          redirect: "/main/auth",
         })
       );
       nav("/main/auth");
     } else {
       setCredsInvalid(true);
+      setLoading(false);
     }
   });
 
@@ -81,7 +89,7 @@ export default function SignInForm() {
             }
             onClick={buttonFunc}
           >
-            Войти
+            {loading ? <Spinner></Spinner> : "Войти"}
           </button>
         </Form>
       </FormProvider>

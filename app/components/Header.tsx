@@ -1,35 +1,41 @@
 import { NavLink } from "react-router";
-import imgURL from "./media/logo_resized.png";
+import imgURL from "../media/logo_resized.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import HeaderInfo from "./HeaderInfo";
-import { useGlobalContext } from "./ContextProvider";
 import { useAppSelector, useAppDispatch } from "~/redux/hooks";
-import { selectToken, authReducer } from "~/redux/authSlice";
+import { selectUsername, authReducer, selectAuth } from "~/redux/authSlice";
 
 export default function Header() {
-  const auth = useAppSelector(selectToken);
-  const context = useGlobalContext();
-  const [username, setUsername] = useState<null | string>(null);
+  const auth = useAppSelector(selectAuth);
+  const username = useAppSelector(selectUsername);
   const [loading, setLaoding] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!username && sessionStorage?.getItem("username")) {
-      setUsername(sessionStorage?.getItem("username"));
+      dispatch(authReducer(sessionStorage?.getItem("username")));
+      setLaoding(false);
+    } else {
       setLaoding(false);
     }
-    setLaoding(false);
-  });
-  // const username = context?.username;
+  }, [setLaoding]);
+
   const nav = useNavigate();
   function handleLogout() {
     sessionStorage.clear();
     setLaoding(true);
-    dispatch(authReducer({ token: null }));
-    nav("");
+    dispatch(
+      authReducer({
+        token: null,
+        username: null,
+        redirect: "/",
+        expire: null,
+        auth: "false",
+      })
+    );
   }
-
+  console.log("header auth", auth, "username", username);
   const loginButtonHandle = () => {
     nav("signin");
   };
@@ -72,25 +78,28 @@ export default function Header() {
         </div>
         <div className="flex flex-row justify-between w-[778px] items-center mr-[60px]">
           <div className="flex content-center justify-between w-[236px] h-fit text-[14px]">
-            <NavLink to="" className="hover:underline">
+            <NavLink
+              to={auth === "true" ? "/main/auth" : ""}
+              className="hover:underline"
+            >
               Главная
             </NavLink>
-            <NavLink to="" className="hover:underline">
+            <NavLink
+              to={auth === "true" ? "/main/auth" : ""}
+              className="hover:underline"
+            >
               Тарифы
             </NavLink>
-            <NavLink to="" className="hover:underline">
+            <NavLink
+              to={auth === "true" ? "/main/auth" : ""}
+              className="hover:underline"
+            >
               FAQ
             </NavLink>
           </div>
           <div className="flex flex-row justify-end w-[430px] items-center">
-            {auth && !loading ? (
-              <HeaderInfo></HeaderInfo>
-            ) : loading ? (
-              placeholder
-            ) : (
-              ""
-            )}
-            {auth && !loading
+            {auth === "true" ? <HeaderInfo></HeaderInfo> : ""}
+            {auth === "true" && !loading
               ? profileGroup
               : loading
               ? placeholder

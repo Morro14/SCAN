@@ -1,31 +1,31 @@
-import { selectUsername, authReducer } from "~/redux/authSlice";
+import { selectUsername, authReducer, selectAuth } from "~/redux/authSlice";
 import { useDispatch, useStore } from "react-redux";
 import { useAppDispatch, useAppSelector } from "~/redux/hooks";
+import Loading from "~/components/Loading";
 
 export default function TestEl() {
-  const store = useStore();
-  const username = useAppSelector(selectUsername);
-  const usernameFromStore = store.getState();
-  console.log(usernameFromStore);
-  console.log("username", username);
-  const dispatch = useAppDispatch();
+  // const auth = useAppSelector(selectAuth);
 
-  function handleClick() {
-    dispatch(authReducer({ username: "new name 1" }));
-    console.log(username);
-  }
+  // console.log("auth", auth);
+  // const dispatch = useAppDispatch();
+
+  // function handleClick() {
+  //   dispatch(authReducer({ auth: "true" }));
+  //   console.log(auth);
+  // }
 
   return (
-    <>
-      <div className="flex justify-center p-5">
+    <div>
+      {/* <div className="flex justify-center p-5">
         <button onClick={handleClick} className="btn bg-blue-501 text-white">
           Click
         </button>
         <div className="bg-viridian-500 w-[200px] h-[24px] text-white ml-2">
-          {username}
-          {/* {usernameFromStore.auth.username} */}
+          {auth}
+
         </div>
-      </div>
-    </>
+      </div> */}
+      <Loading></Loading>
+    </div>
   );
 }

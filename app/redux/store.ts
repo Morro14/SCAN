@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
-import setValid from "./validateSlice";
-import setUserInfo from "./userInfoSlice";
+import setSearchRes from "./searchResultsSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    validate: setValid,
-    userInfo: setUserInfo,
+    searchRes: setSearchRes,
   },
 });
 

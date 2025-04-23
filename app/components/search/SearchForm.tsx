@@ -12,8 +12,14 @@ import type {
   TargetSearchEntity,
 } from "~/entities/entities";
 import getHistograms from "~/requests/histograms";
+import { useAppDispatch, useAppSelector } from "~/redux/hooks";
+import { setSearchRes } from "~/redux/searchResultsSlice";
+import Button from "../util/Buttons";
+import { useState } from "react";
 
 export default function SearchForm() {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
   const methods = useForm();
   let btnOpacity = " opacity-50";
   let handleSubmit = () => {};
@@ -24,6 +30,7 @@ export default function SearchForm() {
     // TODO button
     btnOpacity = " opacity-100";
     handleSubmit = methods.handleSubmit(async (formData) => {
+      setLoading(true);
       const data: HistogramsRequestParams = {
         intervalType: "month",
         histogramTypes: ["totalDocuments", "riskFactors"],
@@ -68,9 +75,14 @@ export default function SearchForm() {
           JSON.stringify(response.data.data)
         );
         sessionStorage.setItem("searchRequestData", JSON.stringify(data));
-        context.setHistogramData(response.data.data);
-        context.setSearchRequestData(data);
+        dispatch(
+          setSearchRes({ histograms: response.data.data, searchParams: data })
+        );
+
         nav("/results");
+      } else {
+        setLoading(false);
+        throw new Error("Не удалось получить данные");
       }
     });
   }
@@ -145,7 +157,7 @@ export default function SearchForm() {
               </div>
               <div className="flex flex-row justify-end mb-[37px]">
                 <div className="">
-                  <button
+                  {/* <button
                     className={
                       "btn w-[305px] h-[59px] bg-blue-501 text-white font-medium text-[22px] rounded-[5px]" +
                       btnOpacity
@@ -153,7 +165,12 @@ export default function SearchForm() {
                     onClick={handleSubmit}
                   >
                     Поиск
-                  </button>
+                  </button> */}
+                  <Button
+                    onClickFunc={handleSubmit}
+                    loadingState={loading}
+                    text="Поиск"
+                  ></Button>
                   <div className="text-[14px] text-[#949494] mt-[8px] ">
                     * Обязательные к заполнению поля
                   </div>

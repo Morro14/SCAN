@@ -2,11 +2,18 @@ import TarrifCard from "~/components/TariffCard";
 import img1 from "../media/main-img-1.svg";
 import img2 from "../media/main-img-2.svg";
 import CustomCarousel from "~/components/carousel/Carousel";
+import { useAppSelector } from "~/redux/hooks";
+import { selectAuth } from "~/redux/authSlice";
+import { Navigate } from "react-router";
+import MainAuth from "./mainAuth";
 
 export default function Main() {
+  const auth = useAppSelector(selectAuth);
+  console.log("main", "auth", auth);
   let button: any = <></>;
-
-  return (
+  return auth === "true" ? (
+    <MainAuth></MainAuth>
+  ) : (
     <div>
       <div className="flex flex-row justify-between mt-[69px]">
         <div>
