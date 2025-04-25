@@ -3,6 +3,8 @@ import { useGlobalContext } from "../ContextProvider";
 import { isFormInvalid } from "../form/utils";
 import { findErrors } from "../form/utils";
 import InputError from "../form/InputError";
+import { dateEndValidator, dateStartValidator } from "../form/validators";
+import { useState } from "react";
 
 export default function SearchDates() {
   const {
@@ -17,11 +19,49 @@ export default function SearchDates() {
     dateEnd: findErrors(errors, "dateEnd"),
   };
   const handleChange = (e: any, name: string) => {
-    context.setSearchData({
-      ...context.searchData,
+    if (styleStart === inputErrorStyle) {
+      setStyleStart(inputStyle);
+    }
+    if (styleEnd === inputErrorStyle) {
+      setStyleEnd(inputStyle);
+    }
+    context.setSearchInputs({
+      ...context.searchInputs,
       [name]: e.target.value.length > 0,
     });
   };
+  // set input borders style when input is not validated
+  const inputErrorStyle =
+    "w-[176px] h-[43px] pl-[17px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 mt-[12px] text-red-501 border-red-501";
+  const inputStyle =
+    "w-[176px] h-[43px] pl-[17px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px] text-black";
+  const [styleStart, setStyleStart] = useState(inputStyle);
+  const [styleEnd, setStyleEnd] = useState(inputStyle);
+  if (isInvalid) {
+    if (
+      context?.validatingForm["dateStart"] &&
+      inputErrors.dateStart.error &&
+      styleStart === inputStyle
+    ) {
+      setStyleStart(inputErrorStyle);
+      context.setValidatingForm({
+        ...context.validatingForm,
+        ["dateStart"]: false,
+      });
+    }
+    if (
+      context?.validatingForm["dateEnd"] &&
+      inputErrors.dateEnd.error &&
+      styleEnd === inputStyle
+    ) {
+      setStyleEnd(inputErrorStyle);
+      context.setValidatingForm({
+        ...context.validatingForm,
+        ["dateEnd"]: false,
+      });
+    }
+  }
+  // set input border back to normal on focus
 
   return (
     <div>
@@ -35,8 +75,8 @@ export default function SearchDates() {
             type="date"
             placeholder="Дата начала"
             id="date-start"
-            className="w-[176px] h-[43px] pl-[17px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px]"
-            {...register("dateStart")}
+            className={styleStart}
+            {...register("dateStart", dateStartValidator as any)}
             onChange={(e) => handleChange(e, "dateStart")}
           />
         </div>
@@ -45,8 +85,8 @@ export default function SearchDates() {
           type="date"
           placeholder="Дата конца"
           id="date-end"
-          className="w-[176px] h-[43px] pl-[17px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px]"
-          {...register("dateEnd")}
+          className={styleEnd}
+          {...register("dateEnd", dateEndValidator)}
           onChange={(e) => handleChange(e, "dateEnd")}
         />
       </div>

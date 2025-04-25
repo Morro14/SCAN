@@ -3,9 +3,7 @@ import Header from "../components/Header";
 import { Outlet } from "react-router";
 import Footer from "~/components/Footer";
 import CotnextProvider from "~/components/ContextProvider";
-import { isRouteErrorResponse, useRouteError } from "react-router";
-import AuthProvider from "~/components/AuthProvider";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "~/redux/hooks";
 import { selectAuth, authReducer } from "~/redux/authSlice";
 
@@ -48,10 +46,10 @@ export default function Home({ children }: { children: React.ReactNode }) {
     <>
       <CotnextProvider>
         <div className="flex flex-col justify-between items-center min-h-screen bg-gray-100">
-          <div className="flex flex-col max-w-[1440px] min-w-[1440px] min-h-screen">
+          <div className="flex flex-col max-w-[1440px] md:min-w-[1440px] min-w-[375px] w-[375px] min-h-screen">
             <Header></Header>
 
-            <main className="pl-[60px] pr-[60px] bg-white pb-[206px] grow">
+            <main className="md:pl-[60px] pl-[14px] md:pr-[60px] pr-[26px] bg-white pb-[206px] grow">
               <Outlet></Outlet>
             </main>
             <Footer></Footer>

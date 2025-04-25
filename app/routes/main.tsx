@@ -17,7 +17,7 @@ export default function Main() {
     <div>
       <div className="flex flex-row justify-between mt-[69px]">
         <div>
-          <h1 className="font-ferry text-6xl">
+          <h1 className="font-ferry md:text-6xl text-[28px]">
             сервис по поиску <br />
             публикаций <br />о компании <br />
             по его ИНН

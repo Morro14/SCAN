@@ -13,18 +13,13 @@ export default function TestEl() {
   //   dispatch(authReducer({ auth: "true" }));
   //   console.log(auth);
   // }
-
+  const innCheck =
+    7 * 7 + 7 * 2 + 1 * 10 + 0 * 3 + 1 * 5 + 3 * 9 + 7 * 4 + 0 * 6 + 6 * 8;
+  const remainder = innCheck / 11;
   return (
-    <div>
-      {/* <div className="flex justify-center p-5">
-        <button onClick={handleClick} className="btn bg-blue-501 text-white">
-          Click
-        </button>
-        <div className="bg-viridian-500 w-[200px] h-[24px] text-white ml-2">
-          {auth}
-
-        </div>
-      </div> */}
+    <div className="flex flex-col">
+      <div>{innCheck}</div>
+      <div>{remainder}</div>
       <Loading></Loading>
     </div>
   );

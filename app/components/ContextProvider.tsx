@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext } from "react";
 import { useState } from "react";
 
 export type GlobalContext = {
@@ -6,13 +6,27 @@ export type GlobalContext = {
   setAuthData: React.Dispatch<
     React.SetStateAction<{ username: boolean; password: boolean }>
   >;
-  searchData: {
+  searchInputs: {
     inn: boolean;
     limit: boolean;
     dateStart: boolean;
     dateEnd: boolean;
   };
-  setSearchData: React.Dispatch<
+  setSearchInputs: React.Dispatch<
+    React.SetStateAction<{
+      inn: boolean;
+      limit: boolean;
+      dateStart: boolean;
+      dateEnd: boolean;
+    }>
+  >;
+  validatingForm: {
+    inn: boolean;
+    limit: boolean;
+    dateStart: boolean;
+    dateEnd: boolean;
+  };
+  setValidatingForm: React.Dispatch<
     React.SetStateAction<{
       inn: boolean;
       limit: boolean;
@@ -26,25 +40,35 @@ const GlobalContext = createContext<GlobalContext | null>(null);
 
 export default function CotnextProvider({ children }: any) {
   console.log("provider");
+  // control inputs in SigninForm
   const [authData, setAuthData] = useState({
     username: false,
     password: false,
   });
-  const [searchData, setSearchData] = useState({
+  // control inputs in SearchForm
+  const [searchInputs, setSearchInputs] = useState({
     inn: false,
     limit: false,
     dateStart: false,
     dateEnd: false,
   });
-
+  // for controlling style of elements when validating
+  const [validatingForm, setValidatingForm] = useState({
+    inn: true,
+    limit: true,
+    dateStart: true,
+    dateEnd: true,
+  });
   return (
     <>
       <GlobalContext.Provider
         value={{
           authData,
           setAuthData,
-          searchData,
-          setSearchData,
+          searchInputs,
+          setSearchInputs,
+          validatingForm,
+          setValidatingForm,
         }}
       >
         {children}

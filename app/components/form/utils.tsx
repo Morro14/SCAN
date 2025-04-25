@@ -21,14 +21,3 @@ export function isFormInvalid(err: FieldErrors<FieldValues>) {
   }
   return false;
 }
-
-export function datesValid(date1: string, date2: string) {
-  const date1F = new Date(date1);
-  const date2F = new Date(date2);
-  const dateNow = new Date(Date.now());
-  console.log(date1F, date2F, dateNow, date2F >= dateNow);
-  if (date1F >= date2F || date2F >= dateNow) {
-    return false;
-  }
-  return true;
-}

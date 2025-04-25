@@ -15,30 +15,7 @@ export default function PrivatRoute() {
 
   const auth = useAppSelector(selectAuth);
 
-  let redirectS = useAppSelector(selectRedirect);
-  console.log("prot", "auth", auth, "redirect", redirectS);
-  let redirect = "/";
-  // if (redirectS) {
-  //   redirect = redirectS;
-  // } else if (
-  //   (loc.pathname === "/results" ||
-  //     loc.pathname === "/search" ||
-  //     loc.pathname === "/main/auth") &&
-  //   auth === "false"
-  // ) {
-  //   redirect = "/signin";
-  // }
-
-  // const dispatch = useAppDispatch();
-  // let navElement = <></>;
-  // if (auth === "false") {
-  //   navElement = <Navigate to={redirect}></Navigate>;
-  // } else if (auth === "pending") {
-  //   navElement = <Loading />;
-  // }
-  // if (redirect) {
-  //   dispatch(authReducer({ redirect: null }));
-  // }
+  console.log("prot", "auth", auth);
 
   return auth === "true" ? (
     <>

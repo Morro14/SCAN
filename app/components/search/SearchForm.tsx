@@ -1,92 +1,100 @@
 import { FormProvider, useForm } from "react-hook-form";
 import SearchInput from "./SearchInput";
-import { dateValidator, loginValidator } from "../form/validators";
+import { limitValidator, loginValidator } from "../form/validators";
 import { Form, useNavigate } from "react-router";
 import SearchSelect from "./SearchSelect";
 import SearchDates from "./SearchDates";
 import Checkbox from "./SearchCheckbox";
 import { innValidator } from "../form/validators";
 import { useGlobalContext } from "../ContextProvider";
-import type {
-  HistogramsRequestParams,
-  TargetSearchEntity,
-} from "~/entities/entities";
+import type { HistogramsRequestParams } from "~/entities/entities";
 import getHistograms from "~/requests/histograms";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
+import { useAppDispatch } from "~/redux/hooks";
 import { setSearchRes } from "~/redux/searchResultsSlice";
 import Button from "../util/Buttons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SearchForm() {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const methods = useForm();
-  let btnOpacity = " opacity-50";
+  let btnOpacity = "opacity-50";
   let handleSubmit = () => {};
-
   const context = useGlobalContext();
   const nav = useNavigate();
-  if (context) {
-    // TODO button
-    btnOpacity = " opacity-100";
-    handleSubmit = methods.handleSubmit(async (formData) => {
-      setLoading(true);
-      const data: HistogramsRequestParams = {
-        intervalType: "month",
-        histogramTypes: ["totalDocuments", "riskFactors"],
 
-        similarMode: "none",
-        limit: formData.limit,
-        sortType: "issueDate",
-        sortDirectionType: "desc",
-        tonality: formData.tonality,
-        onlyMainRole: formData["3"],
-        onlyWithRiskFactors: formData["4"],
-        attributeFilters: {
-          excludeTechNews: formData["5"],
-          excludeAnnouncements: formData["6"],
-          excludeDigests: formData["7"],
-        },
+  if (
+    context?.searchInputs &&
+    !Object.values(context?.searchInputs).includes(false)
+  ) {
+    btnOpacity = "opacity-100";
+    handleSubmit = () => {
+      context.setValidatingForm({
+        inn: true,
+        limit: true,
+        dateStart: true,
+        dateEnd: true,
+      });
+      const submit = methods.handleSubmit(async (formData) => {
+        setLoading(true);
 
-        issueDateInterval: {
-          startDate: formData.dateStart,
-          endDate: formData.dateEnd,
-        },
-        searchContext: {
-          targetSearchEntitiesContext: {
-            targetSearchEntities: [
-              {
-                type: "company",
-                isBuisnessNews: formData["2"],
-                sparkId: null,
-                entityId: null,
-                inn: formData.inn,
-                maxFulness: formData["1"],
-              },
-            ],
+        const data: HistogramsRequestParams = {
+          intervalType: "month",
+          histogramTypes: ["totalDocuments", "riskFactors"],
+
+          similarMode: "none",
+          limit: formData.limit,
+          sortType: "issueDate",
+          sortDirectionType: "desc",
+          tonality: formData.tonality,
+          onlyMainRole: formData["3"],
+          onlyWithRiskFactors: formData["4"],
+          attributeFilters: {
+            excludeTechNews: formData["5"],
+            excludeAnnouncements: formData["6"],
+            excludeDigests: formData["7"],
           },
-        },
-      };
 
-      const response = await getHistograms(data);
-      if (response.status === 200) {
-        sessionStorage.setItem(
-          "histograms",
-          JSON.stringify(response.data.data)
-        );
-        sessionStorage.setItem("searchRequestData", JSON.stringify(data));
-        dispatch(
-          setSearchRes({ histograms: response.data.data, searchParams: data })
-        );
+          issueDateInterval: {
+            startDate: formData.dateStart,
+            endDate: formData.dateEnd,
+          },
+          searchContext: {
+            targetSearchEntitiesContext: {
+              targetSearchEntities: [
+                {
+                  type: "company",
+                  isBuisnessNews: formData["2"],
+                  sparkId: null,
+                  entityId: null,
+                  inn: formData.inn,
+                  maxFulness: formData["1"],
+                },
+              ],
+            },
+          },
+        };
 
-        nav("/results");
-      } else {
-        setLoading(false);
-        throw new Error("Не удалось получить данные");
-      }
-    });
+        const response = await getHistograms(data);
+        if (response.status === 200) {
+          sessionStorage.setItem(
+            "histograms",
+            JSON.stringify(response.data.data)
+          );
+          sessionStorage.setItem("searchRequestData", JSON.stringify(data));
+          dispatch(
+            setSearchRes({ histograms: response.data.data, searchParams: data })
+          );
+
+          nav("/results");
+        } else {
+          setLoading(false);
+          throw new Error("Не удалось получить данные");
+        }
+      });
+      submit();
+    };
   }
-
   return (
     <div className="h-full">
       <FormProvider {...methods}>
@@ -123,7 +131,7 @@ export default function SearchForm() {
                   name="limit"
                   label="Количество документов в выдаче"
                   placeholder="От 1 до 1000"
-                  validation={loginValidator}
+                  validation={limitValidator}
                 ></SearchInput>
               </div>
               <div>
@@ -157,20 +165,13 @@ export default function SearchForm() {
               </div>
               <div className="flex flex-row justify-end mb-[37px]">
                 <div className="">
-                  {/* <button
-                    className={
-                      "btn w-[305px] h-[59px] bg-blue-501 text-white font-medium text-[22px] rounded-[5px]" +
-                      btnOpacity
-                    }
-                    onClick={handleSubmit}
-                  >
-                    Поиск
-                  </button> */}
-                  <Button
-                    onClickFunc={handleSubmit}
-                    loadingState={loading}
-                    text="Поиск"
-                  ></Button>
+                  <div className={btnOpacity}>
+                    <Button
+                      onClickFunc={handleSubmit}
+                      loadingState={loading}
+                      text="Поиск"
+                    ></Button>
+                  </div>
                   <div className="text-[14px] text-[#949494] mt-[8px] ">
                     * Обязательные к заполнению поля
                   </div>

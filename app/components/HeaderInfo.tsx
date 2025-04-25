@@ -28,23 +28,26 @@ export default function HeaderInfo() {
       getUserInfo_();
     }
   }, [userInfo, getUserInfo_, setLoading, auth, loading]);
+
   return loading ? (
-    <div className="flex justify-center items-center flex-col w-[175px] h-[63px] bg-[#D9D9D9]/40 rounded-[5px] p-[8px]">
+    <div className="flex justify-center items-center flex-col md:w-[175px] w-[111px] md:h-[63px] h-[75px] bg-[#D9D9D9]/40 rounded-[5px] p-[8px]">
       <Spinner></Spinner>
     </div>
   ) : (
-    <div className="flex justify-center flex-col w-[175px] h-[63px] bg-[#D9D9D9]/40 rounded-[5px] p-[8px]">
-      <div className="flex flex-row items-center justify-end">
-        <div className="text-[10px] text-gray-950/40 ">
+    <div className="flex justify-center flex-col md:w-[175px] w-[111px] md:h-[63px] h-[75px] bg-[#D9D9D9]/40 rounded-[5px] p-[8px]">
+      <div className="md:flex md:flex-row md:items-center md:justify-end block">
+        <div className="md:text-[10px] text-[8px] text-gray-950/40 text-nowrap md:text-wrap">
           Использовано компаний
         </div>
-        <div className="text-[14px] font-bold ml-[9px]">
+        <div className="text-[14px] font-bold md:ml-[9px]">
           {userInfo && !loading ? userInfo?.count : "loading"}
         </div>
       </div>
-      <div className="flex flex-row items-center justify-end">
-        <div className="text-[10px] text-gray-950/40 ">Лимит по компаниям</div>
-        <div className="text-[14px] text-[#8AC540] font-bold ml-[9px]">
+      <div className="md:flex md:flex-row md:items-center md:justify-end block">
+        <div className="md:text-[10px] text-[8px] text-gray-950/40 text-nowrap md:text-wrap ">
+          Лимит по компаниям
+        </div>
+        <div className="text-[14px] text-[#8AC540] font-bold md:ml-[9px]">
           {userInfo && !loading ? userInfo?.limit : "loading"}
         </div>
       </div>

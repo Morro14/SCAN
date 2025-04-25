@@ -16,23 +16,23 @@ export default function MainAuth() {
     nav("/search");
   };
   const auth = useAppSelector(selectAuth);
-  console.log("main auth", auth);
 
   const userTariff = "beginner";
 
   return (
     <div>
-      <div className="flex flex-row justify-between mt-[69px]">
+      <div className="md:flex md:flex-row md:justify-between mt-[69px]">
         <div>
-          <h1 className="font-ferry text-6xl">
+          <h1 className="font-ferry md:text-6xl text-[28px] text-nowrap">
             сервис по поиску <br />
             публикаций <br />о компании <br />
             по его ИНН
           </h1>
-          <div className="text-xl mt-[20px]">
+          <div className="md:text-xl text-[18px] mt-[20px] font-[400]">
             Комплексный анализ публикаций, получение данных <br />в формате PDF
             на электронную почту.
           </div>
+
           <Button
             onClickFunc={handleSearchBtn}
             loadingState={loading}
@@ -40,9 +40,15 @@ export default function MainAuth() {
           ></Button>
         </div>
 
-        <img src={img1} alt="main-img-1" className="w-[629px] h-[593px]" />
+        <img
+          src={img1}
+          alt="main-img-1"
+          className="md:w-[629px] w-[347x] mt-[24px] md:mt-[0px] md:h-[593px]"
+        />
       </div>
-      <h2 className="main-headline-2">Почему именно мы</h2>
+      <h2 className="md:main-headline-2 font-ferry md:mt-[0px] mt-[55px] text-[28px]">
+        Почему именно мы
+      </h2>
       <CustomCarousel></CustomCarousel>
       <div>
         <img src={img2} alt="main-img-2" className="ml-[-9px] mt-[50px]" />
