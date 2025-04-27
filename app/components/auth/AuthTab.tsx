@@ -12,10 +12,10 @@ export default function AuthTab() {
 	const tabStyleActive = " border-viridian-500 text-viridian-500";
 	const tabStyleNonactive = " border-[#C7C7C7] text-[#C7C7C7]";
 	return (
-		<div className="flex flex-row justify-between">
+		<div className="flex flex-row justify-between md:text-lg text-base">
 			<button
 				className={
-					"flex justify-center items-start w-[151px] h-[29px] border-b-2" +
+					"flex justify-center items-start md:w-[151px] w-[103px] h-[29px] border-b-2" +
 					(path === "/signin" ? tabStyleActive : tabStyleNonactive)
 				}
 				onClick={(e) => handleClick(e, "/signin")}
@@ -24,7 +24,7 @@ export default function AuthTab() {
 			</button>
 			<button
 				className={
-					"flex justify-center items-start w-[213px] h-[29px] border-b-2" +
+					"flex justify-center items-start md:w-[213px] w-[182px] h-[29px] border-b-2" +
 					(path === "/signup" ? tabStyleActive : tabStyleNonactive)
 				}
 				onClick={(e) => handleClick(e, "/signup")}
