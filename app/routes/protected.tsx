@@ -6,7 +6,7 @@ import Loading from "~/components/Loading";
 
 export default function PrivatRoute() {
 	const auth = useAppSelector(selectAuth);
-
+	console.log(auth);
 	return auth === "true" ? (
 		<>
 			<Outlet></Outlet>

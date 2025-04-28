@@ -38,14 +38,12 @@ export default function SearchInput({
 	const inputStyle =
 		"md:w-[242px] w-[335px] h-[43px] pl-[17px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px]";
 	const [style, setStyle] = useState(inputStyle);
-	console.log("style", style);
 	if (
 		context?.validatingForm[name] &&
 		isInvalid &&
 		inputError.error &&
 		style === inputStyle
 	) {
-		console.log("setting error style", name);
 		setStyle(inputErrorStyle);
 		context.setValidatingForm({ ...context.validatingForm, [name]: false });
 	}

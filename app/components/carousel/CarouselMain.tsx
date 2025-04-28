@@ -14,7 +14,6 @@ export default function CarouselMain() {
 	useEffect(() => {
 		setRefs({ ...{ innerRef: innerRef, containerRef: containerRef } });
 	}, [innerRef, containerRef, setRefs]);
-	console.log(pos);
 	function arrowFunc(step: number) {
 		const containerW = refs.containerRef.current.offsetWidth;
 		const innerWidth = refs.innerRef.current.offsetWidth;

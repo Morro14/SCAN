@@ -23,10 +23,14 @@ export default function SignInForm() {
 
 	const onSubmit = methods.handleSubmit(async (formData) => {
 		// TODO auth errors handle
+		dispatch(
+			authReducer({
+				auth: "pending",
+			})
+		);
 		setLoading(true);
 		const response = await loginReq(formData.username, formData.password);
 		if (response.status === 200) {
-			console.log(response);
 			sessionStorage.setItem("token", response.data.accessToken);
 			sessionStorage.setItem("username", formData.username);
 

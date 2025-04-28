@@ -1,10 +1,12 @@
 import { NavLink } from "react-router";
-import imgURL from "../media/logo_resized.png";
+import headerLogoGreen from "../media/logo_resized.png";
+import headerLogoWhite from "../media/header-logo-white.svg";
 import { useEffect, useState, type JSX, type ReactNode } from "react";
 import { useNavigate } from "react-router";
 import HeaderInfo from "./HeaderInfo";
 import { useAppSelector, useAppDispatch } from "~/redux/hooks";
 import { selectUsername, authReducer, selectAuth } from "~/redux/authSlice";
+import getUserInfo from "~/requests/userInfo";
 
 export default function Header() {
 	const auth = useAppSelector(selectAuth);
@@ -12,49 +14,102 @@ export default function Header() {
 	const [loading, setLoading] = useState(false);
 	const dispatch = useAppDispatch();
 	const [mobTab, showMobTab] = useState(false);
-
+	const [userInfo, setUserInfo] = useState<null | {
+		count: number;
+		limit: number;
+	}>(null);
+	const [loadingUserInfo, setLoadingUserInfo] = useState(true);
 	useEffect(() => {
-		console.log("effect");
 		// trying to get username from storage
 		if (!username && sessionStorage?.getItem("username")) {
 			dispatch(authReducer({ username: sessionStorage?.getItem("username") }));
-			setLoading(false);
-		} else {
-			setLoading(false);
 		}
-	}, [setLoading, loading]);
+		// getting user info
+		if (
+			userInfo === null &&
+			(auth === "true" || auth === "pending") &&
+			loadingUserInfo
+		) {
+			setLoadingUserInfo(false);
+			getUserInfo_();
+		}
+	}, [loadingUserInfo, setLoadingUserInfo, auth]);
 
 	const nav = useNavigate();
-
+	async function getUserInfo_() {
+		const response = await getUserInfo();
+		if (response) {
+			setUserInfo({
+				count: response.eventFiltersInfo.usedCompanyCount,
+				limit: response.eventFiltersInfo.companyLimit,
+			});
+		}
+	}
 	function handleLogout() {
 		sessionStorage.clear();
-		setLoading(true);
+
+		showMobTab(false);
 		dispatch(
 			authReducer({
 				token: null,
 				username: null,
 				expire: null,
-				auth: "pending",
+				auth: "false",
 			})
 		);
 		nav("/");
 	}
 	const handleLogin = () => {
+		showMobTab(false);
 		nav("signin");
 	};
 	const placeholder = (
 		<div className="flex grow h-[100%] bg-gray-300 rounded-[5px]"></div>
 	);
-	const mobTabHeight = mobTab ? "60px" : "0px";
 
 	return (
 		<div>
-			<header className="flex flex-row items-center justify-between h-[93px] bg-white">
+			<div className="absolute flex flex-col items-center w-[375px] h-[491px] z-20">
+				<div
+					className="h-[109px] mt-[138px] flex flex-col justify-between items-center transition-all duration-300"
+					style={{ opacity: mobTab ? 100 : 0 }}
+				>
+					<div className="text-white text-lg">Главная</div>
+					<div className="text-white text-lg">Тарифы</div>
+					<div className="text-white text-lg">FAQ</div>
+				</div>
+				<div className="opacity-40 mt-[75px] text-white">
+					Зарегистрироваться
+				</div>
+				<button
+					className="btn bg-viridian-501 w-[295px] h-[52px] mt-[21px] transition-all duration-300"
+					style={{ opacity: mobTab ? 100 : 0 }}
+				>
+					Войти
+				</button>
+			</div>
+			<div className="absolute flex justify-end w-[375px] h-[491px] z-10">
+				<div
+					className="relative transition-all duration-300 h-full bg-viridian-500"
+					style={{ width: mobTab ? "375px" : "0px", opacity: mobTab ? 100 : 0 }}
+				></div>
+			</div>
+			<header className="relative flex flex-row items-center justify-between h-[93px] z-50">
 				<div className="flex content-center ml-[14px] w-[111px]">
-					<img
-						src={imgURL}
-						className="object-contain"
-					></img>
+					{
+						<div className="relative">
+							<img
+								src={headerLogoGreen}
+								className="object-contain transition-all duration-300"
+								style={{ opacity: !mobTab ? 100 : 0 }}
+							></img>
+							<img
+								src={headerLogoWhite}
+								className="absolute top-[-24px] object-contain transition-all duration-300"
+								style={{ opacity: mobTab ? 100 : 0 }}
+							></img>
+						</div>
+					}
 				</div>
 				<div className="flex flex-row justify-between md:w-[778px] items-center mr-[26px]">
 					<div className="hidden md:flex content-center justify-between w-[236px] h-fit text-[14px]">
@@ -78,28 +133,34 @@ export default function Header() {
 						</NavLink>
 					</div>
 					<div className="flex-row justify-end w-[430px] items-center hidden md:flex">
-						{auth === "true" ? <HeaderInfo></HeaderInfo> : ""}
-						{auth === "true" && !loading ? (
+						{auth === "true" ? (
+							<HeaderInfo
+								data={userInfo}
+								opacity={mobTab ? 0 : 100}
+							></HeaderInfo>
+						) : (
+							""
+						)}
+						{auth === "true" ? (
 							<ProfileGroup
 								username={username}
 								logoutFunc={handleLogout}
 							/>
-						) : auth !== "true" && !loading ? (
-							<LoginGroup loginFunc={handleLogin}></LoginGroup>
 						) : (
-							placeholder
+							<LoginGroup loginFunc={handleLogin}></LoginGroup>
 						)}
 					</div>
 					<div className="flex items-center md:hidden">
-						{auth === "true" ? <HeaderInfo></HeaderInfo> : ""}
+						{auth === "true" ? (
+							<HeaderInfo
+								data={userInfo}
+								opacity={mobTab ? 0 : 100}
+							></HeaderInfo>
+						) : (
+							""
+						)}
 						<div className="ml-[31px]">
 							<HeaderMenu
-								auth={auth}
-								username={username}
-								loading={loading}
-								placeholder={placeholder}
-								handleLogin={handleLogin}
-								handleLogout={handleLogout}
 								showFunc={showMobTab}
 								showState={mobTab}
 							/>
@@ -107,25 +168,6 @@ export default function Header() {
 					</div>
 				</div>
 			</header>
-			<div
-				className="flex justify-end items-center pr-[26px] transition-all duration-150 bg-white md:hidden"
-				style={{ height: mobTabHeight }}
-			>
-				{mobTab ? (
-					auth === "true" && !loading ? (
-						<ProfileGroup
-							username={username}
-							logoutFunc={handleLogout}
-						/>
-					) : auth !== "true" && !loading ? (
-						<LoginGroup loginFunc={handleLogin}></LoginGroup>
-					) : (
-						<p>loading</p>
-					)
-				) : (
-					""
-				)}
-			</div>
 		</div>
 	);
 }
@@ -169,17 +211,12 @@ export function LoginGroup({ loginFunc }: { loginFunc: any }) {
 }
 
 import menuImg from "../media/header-menu-icon.svg";
+import HeaderMobTab from "./HeaderMobTab";
 
 export function HeaderMenu({
 	showFunc,
 	showState,
 }: {
-	auth: "true" | "false" | "pending";
-	placeholder: ReactNode;
-	username: string | null;
-	loading: boolean;
-	handleLogout: any;
-	handleLogin: any;
 	showFunc: any;
 	showState: boolean;
 }) {
@@ -189,13 +226,43 @@ export function HeaderMenu({
 	return (
 		<div className="">
 			<div
-				className="hover:opacity-90 hover:cursor-pointer"
+				className="flex flex-col justify-between hover:opacity-90 hover:cursor-pointer w-[30px] h-[25px]"
 				onClick={handleClick}
 			>
-				<img
-					src={menuImg}
-					alt=""
-				/>
+				<div
+					className="w-full h-[5px] bg-viridian-500 transition-all  duration-300"
+					style={
+						showState
+							? {
+									opacity: 0,
+							  }
+							: {}
+					}
+				></div>
+				<div
+					className="w-full h-[5px] bg-viridian-500 transition-all  duration-300"
+					style={
+						showState
+							? {
+									transform: "rotate(45deg)",
+									backgroundColor: "white",
+									bottom: "0px",
+							  }
+							: {}
+					}
+				></div>
+				<div
+					className="w-full h-[5px] bg-viridian-500 relative transition-all duration-300"
+					style={
+						showState
+							? {
+									transform: "rotate(135deg)",
+									backgroundColor: "white",
+									bottom: "10px",
+							  }
+							: { bottom: "0px" }
+					}
+				></div>
 			</div>
 		</div>
 	);

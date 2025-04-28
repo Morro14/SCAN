@@ -45,7 +45,7 @@ export default function Home({ children }: { children: React.ReactNode }) {
 	return (
 		<>
 			<CotnextProvider>
-				<div className="flex flex-col justify-between items-center min-h-screen bg-gray-100">
+				<div className="flex flex-col justify-between items-center min-h-screen ">
 					<div className="flex flex-col max-w-[1440px] md:min-w-[1440px] min-w-[375px] w-[375px] min-h-screen">
 						<Header></Header>
 
