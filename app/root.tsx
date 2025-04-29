@@ -31,7 +31,7 @@ export const links: Route.LinksFunction = () => [
 export function Layout({ children }: { children: React.ReactNode }) {
 	axios.interceptors.request.use(
 		(config) => {
-			config.headers["Authorization"] = `Bearer 1${sessionStorage.getItem(
+			config.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
 				"token"
 			)}`;
 			config.headers["Content-Type"] = "application/json";

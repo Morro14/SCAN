@@ -19,6 +19,12 @@ export default function DocumentCard({
 	wordCount: number;
 	docCount: number;
 }) {
+	function parseText(text: string) {
+		const reg = new RegExp("<[\\s\\S]+?>", "g");
+		const text_ = text.replace(reg, "");
+
+		return text_;
+	}
 	let tagCount = 0;
 	return (
 		<div
@@ -78,7 +84,7 @@ export default function DocumentCard({
 						className="mt-[20px] md:max-h-[221px] max-h-[255px] opacity-50 overflow-clip md:text-base text-sm"
 						key={"doc-11-" + docCount}
 					>
-						{text}
+						{parseText(text)}
 					</div>
 				</div>
 				<div

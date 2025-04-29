@@ -11,14 +11,15 @@ import getUserInfo from "~/requests/userInfo";
 export default function Header() {
 	const auth = useAppSelector(selectAuth);
 	const username = useAppSelector(selectUsername);
-	const [loading, setLoading] = useState(false);
 	const dispatch = useAppDispatch();
 	const [mobTab, showMobTab] = useState(false);
 	const [userInfo, setUserInfo] = useState<null | {
 		count: number;
 		limit: number;
 	}>(null);
+
 	const [loadingUserInfo, setLoadingUserInfo] = useState(true);
+
 	useEffect(() => {
 		// trying to get username from storage
 		if (!username && sessionStorage?.getItem("username")) {
@@ -30,12 +31,12 @@ export default function Header() {
 			(auth === "true" || auth === "pending") &&
 			loadingUserInfo
 		) {
-			setLoadingUserInfo(false);
 			getUserInfo_();
 		}
-	}, [loadingUserInfo, setLoadingUserInfo, auth]);
+	}, [loadingUserInfo, auth]);
 
 	const nav = useNavigate();
+
 	async function getUserInfo_() {
 		const response = await getUserInfo();
 		if (response) {
@@ -44,6 +45,7 @@ export default function Header() {
 				limit: response.eventFiltersInfo.companyLimit,
 			});
 		}
+		setLoadingUserInfo(false);
 	}
 	function handleLogout() {
 		sessionStorage.clear();
@@ -74,9 +76,24 @@ export default function Header() {
 					className="h-[109px] mt-[138px] flex flex-col justify-between items-center transition-all duration-300"
 					style={{ opacity: mobTab ? 100 : 0 }}
 				>
-					<div className="text-white text-lg">Главная</div>
-					<div className="text-white text-lg">Тарифы</div>
-					<div className="text-white text-lg">FAQ</div>
+					<NavLink
+						to={"/"}
+						className="text-white text-lg"
+					>
+						Главная
+					</NavLink>
+					<NavLink
+						to={"/"}
+						className="text-white text-lg"
+					>
+						Тарифы
+					</NavLink>
+					<NavLink
+						to={"/"}
+						className="text-white text-lg"
+					>
+						FAQ
+					</NavLink>
 				</div>
 				<div className="opacity-40 mt-[75px] text-white">
 					Зарегистрироваться
@@ -85,7 +102,7 @@ export default function Header() {
 					className="btn bg-viridian-501 w-[295px] h-[52px] mt-[21px] transition-all duration-300"
 					style={{ opacity: mobTab ? 100 : 0 }}
 				>
-					Войти
+					{"Войти"}
 				</button>
 			</div>
 			<div className="absolute flex justify-end w-[375px] h-[491px] z-10">
@@ -114,19 +131,19 @@ export default function Header() {
 				<div className="flex flex-row justify-between md:w-[778px] items-center mr-[26px]">
 					<div className="hidden md:flex content-center justify-between w-[236px] h-fit text-[14px]">
 						<NavLink
-							to={auth === "true" ? "/main/auth" : ""}
+							to={"/"}
 							className="hover:underline"
 						>
 							Главная
 						</NavLink>
 						<NavLink
-							to={auth === "true" ? "/main/auth" : ""}
+							to={"/"}
 							className="hover:underline"
 						>
 							Тарифы
 						</NavLink>
 						<NavLink
-							to={auth === "true" ? "/main/auth" : ""}
+							to={"/"}
 							className="hover:underline"
 						>
 							FAQ

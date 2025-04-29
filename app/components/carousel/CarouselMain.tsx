@@ -11,13 +11,16 @@ export default function CarouselMain() {
 
 	const innerRef = useRef<null | HTMLDivElement>(null);
 	const containerRef = useRef<null | HTMLDivElement>(null);
+
 	useEffect(() => {
 		setRefs({ ...{ innerRef: innerRef, containerRef: containerRef } });
 	}, [innerRef, containerRef, setRefs]);
+
 	function arrowFunc(step: number) {
 		const containerW = refs.containerRef.current.offsetWidth;
 		const innerWidth = refs.innerRef.current.offsetWidth;
 		const stepW = containerW;
+
 		if (innerWidth && stepW && innerWidth + pos - stepW <= stepW && step < 0) {
 			if (pos !== -innerWidth + stepW) {
 				setPos(-innerWidth + stepW);
@@ -35,8 +38,10 @@ export default function CarouselMain() {
 			setPos(pos + stepW);
 		}
 	}
+
 	const cardProperties =
 		"md:w-[400px] w-[298px] md:min-w-[400px] min-w-[298px] md:h-[225px] h-[188px] p-[17px] pt-[30px] rounded-[10px] shadowed";
+
 	return (
 		<div className="flex flex-row items-center justify-center mt-[27px]">
 			<div className="md:static relative left-[19px]">

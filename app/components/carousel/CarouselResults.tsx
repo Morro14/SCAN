@@ -50,7 +50,7 @@ export default function CarouselResults({
 		if (innerWidth && stepW && innerWidth + pos - stepW <= stepW && step < 0) {
 			if (pos !== -innerWidth + stepW) {
 				setPos(-innerWidth + stepW);
-				setArrowActive({ ...arrowActive, right: false });
+				setArrowActive({ left: true, right: false });
 			}
 		} else if (stepW && step < 0) {
 			setPos(pos - stepW);
@@ -59,7 +59,7 @@ export default function CarouselResults({
 		if (stepW && step > 0 && Math.abs(pos) <= stepW) {
 			if (pos !== 0) {
 				setPos(0);
-				setArrowActive({ ...arrowActive, left: false });
+				setArrowActive({ right: true, left: false });
 			}
 		} else if (stepW && step > 0) {
 			setPos(pos + stepW);
