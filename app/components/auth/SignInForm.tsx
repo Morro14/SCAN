@@ -6,7 +6,7 @@ import { loginValidator } from "../form/validators";
 import { useNavigate } from "react-router";
 import { useGlobalContext } from "../ContextProvider";
 import loginReq from "~/requests/login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "~/redux/hooks";
 import { authReducer } from "~/redux/authSlice";
 

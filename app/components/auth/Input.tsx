@@ -38,6 +38,7 @@ export default function Input({
 			<div className="flex">
 				<input
 					type="text"
+					id="username"
 					placeholder={placeholder}
 					{...register(name, validation)}
 					className="w-[100%] h-[43px] rounded-[5px] shadow-[0_0_18px_0] shadow-[#0000000D] border-1 border-[#C7C7C7] mt-[12px]"
