@@ -10,10 +10,6 @@ export default async function getSearchObjects(data: HistogramsRequestParams) {
 			return r;
 		})
 		.catch((e) => {
-			throw new Response("Bad Request", {
-				status: 404,
-				statusText: e.response.statusText,
-			});
 			console.log(e);
 			return e;
 		});

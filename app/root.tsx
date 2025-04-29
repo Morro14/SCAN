@@ -42,6 +42,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			console.log(error);
 		}
 	);
+
 	return (
 		<html lang="en">
 			<head>
@@ -52,6 +53,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				/>
 				<Meta />
 				<Links />
+				<title>Scan</title>
 			</head>
 			<body>
 				<Provider store={store}>{children}</Provider>

@@ -11,12 +11,8 @@ export default async function getUserInfo() {
 			}
 		})
 		.catch((e) => {
-			throw new Response("Bad Request", {
-				status: 404,
-				statusText: e.response.statusText,
-			});
 			console.log(e);
-			return null;
+			return e;
 		});
 
 	return response;

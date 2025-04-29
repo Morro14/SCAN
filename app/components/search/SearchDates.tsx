@@ -2,7 +2,6 @@ import { useFormContext } from "react-hook-form";
 import { useGlobalContext } from "../ContextProvider";
 import { isFormInvalid } from "../form/utils";
 import { findErrors } from "../form/utils";
-import InputError from "../form/InputError";
 import { dateEndValidator, dateStartValidator } from "../form/validators";
 import { useState } from "react";
 
@@ -109,4 +108,8 @@ export default function SearchDates() {
 			</div>
 		</div>
 	);
+}
+
+export function InputError({ message }: { message: string }) {
+	return <div className="text-[#FF5959] text-sm mt-[6px]">{message}</div>;
 }

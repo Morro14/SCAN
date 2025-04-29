@@ -16,7 +16,6 @@ export default function MainAuth() {
 		nav("/search");
 	};
 	const auth = useAppSelector(selectAuth);
-	console.log(auth);
 	// setting user's tariff for testing
 	const userTariff = "beginner";
 

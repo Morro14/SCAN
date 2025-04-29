@@ -28,6 +28,7 @@ export default function CarouselMain() {
 			}
 		} else if (stepW && step < 0) {
 			setPos(pos - stepW);
+			setArrowActive({ left: true, right: true });
 		}
 		if (stepW && step > 0 && Math.abs(pos) <= stepW) {
 			if (pos !== 0) {
@@ -36,6 +37,7 @@ export default function CarouselMain() {
 			}
 		} else if (stepW && step > 0) {
 			setPos(pos + stepW);
+			setArrowActive({ left: true, right: true });
 		}
 	}
 
@@ -55,7 +57,7 @@ export default function CarouselMain() {
 			</div>
 
 			<div
-				className=" flex overflow-clip md:max-w-[1260px] max-w-[318px]"
+				className=" flex overflow-clip md:max-w-[1292px] max-w-[336px]"
 				ref={containerRef}
 			>
 				<div
@@ -63,8 +65,8 @@ export default function CarouselMain() {
 					ref={innerRef}
 					style={{ left: pos }}
 				>
-					<div className="flex flex-row mb-[20px] mt-[20px]">
-						<div className={cardProperties + " ml-[10px] "}>
+					<div className="flex flex-row mb-[20px] mt-[20px] md:mt-[15px]">
+						<div className={cardProperties + " ml-[19px] md:ml-[15px] "}>
 							<img
 								src={carouselIcon1}
 								alt="carousel-icon-1"
@@ -74,7 +76,7 @@ export default function CarouselMain() {
 								Высокая и оперативная <br /> скорость обработки заявки
 							</div>
 						</div>
-						<div className={cardProperties + " ml-[20px]"}>
+						<div className={cardProperties + " ml-[38px] md:ml-[30px]"}>
 							<img
 								src={carouselIcon2}
 								alt="carousel-icon-1"
@@ -84,7 +86,7 @@ export default function CarouselMain() {
 								Высокая и оперативная <br /> скорость обработки заявки
 							</div>
 						</div>
-						<div className={cardProperties + " ml-[20px]"}>
+						<div className={cardProperties + " ml-[38px] md:ml-[30px]"}>
 							<img
 								src={carouselIcon2}
 								alt="carousel-icon-1"
@@ -94,7 +96,7 @@ export default function CarouselMain() {
 								Высокая и оперативная <br /> скорость обработки заявки
 							</div>
 						</div>
-						<div className={cardProperties + " ml-[20px]"}>
+						<div className={cardProperties + " ml-[38px] md:ml-[30px]"}>
 							<img
 								src={carouselIcon2}
 								alt="carousel-icon-1"
@@ -104,7 +106,12 @@ export default function CarouselMain() {
 								Высокая и оперативная <br /> скорость обработки заявки
 							</div>
 						</div>
-						<div className={cardProperties + " ml-[20px] mr-[10px]"}>
+						<div
+							className={
+								cardProperties +
+								" ml-[38px] mr-[19px] md:ml-[30px] md:mr-[15px]"
+							}
+						>
 							<img
 								src={carouselIcon2}
 								alt="carousel-icon-1"

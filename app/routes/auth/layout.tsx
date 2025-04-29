@@ -5,10 +5,10 @@ import AuthTab from "~/components/auth/AuthTab";
 
 export default function AuthLayout() {
 	return (
-		<div className="flex md:flex-row flex-col">
+		<div className="flex md:flex-row md:justify-between flex-col">
 			<div className="md:mt-[69px] mt-[31px]">
 				<div className="black md:text-xl text-[22px] md:w-[724px] md:h-[144px] md:leading-[46px]">
-					<div className="md:static hidden">
+					<div className="black leading-tight text-[40px] md:block hidden">
 						Для оформления подписки <br />
 						на тариф, необходимо авторизоваться.
 					</div>
@@ -22,15 +22,15 @@ export default function AuthLayout() {
 				<img
 					src={img}
 					alt="img-auth"
-					className="md:static hidden w-[322px] ml-[112px] mt-[14px]"
+					className="md:block hidden w-[322px] ml-[112px] mt-[14px]"
 				/>
 			</div>
-			<div className="h-[126px]"></div>
-			<div className="md:flex md:static relative md:justify-end md:mt-[69px] md:mr-[81px]">
+			<div className="h-[126px] md:hidden"></div>
+			<div className="relative  md:mt-[69px] md:mr-[81px]">
 				<img
 					src={imgLock}
 					alt="img-lock"
-					className="absolute md:left-[24px] md:top-[-55px] w-[75px] h-[92px] right-[180px] top-[-84px]"
+					className="absolute md:left-[-54px] md:top-[-56px] w-[75px] h-[92px] right-[180px] top-[-84px]"
 				/>
 
 				<div className="shadowed md:min-w-[429px] md:w-[429px] w-[335px] md:h-[523px] h-[504px] rounded-[10px] md:p-[25px] p-[15px]">

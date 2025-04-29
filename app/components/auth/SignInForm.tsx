@@ -11,7 +11,6 @@ import { useAppDispatch } from "~/redux/hooks";
 import { authReducer } from "~/redux/authSlice";
 
 export default function SignInForm() {
-	// TODO empty fields check
 	let buttonOpacity = " opacity-50 hover:opacity-100";
 
 	const methods = useForm();
@@ -22,7 +21,6 @@ export default function SignInForm() {
 	const dispatch = useAppDispatch();
 
 	const onSubmit = methods.handleSubmit(async (formData) => {
-		// TODO auth errors handle
 		dispatch(
 			authReducer({
 				auth: "pending",
@@ -30,7 +28,8 @@ export default function SignInForm() {
 		);
 		setLoading(true);
 		const response = await loginReq(formData.username, formData.password);
-		if (response.status === 200) {
+		setLoading(false);
+		if (!response.errorCode && response.status === 200) {
 			sessionStorage.setItem("token", response.data.accessToken);
 			sessionStorage.setItem("username", formData.username);
 
@@ -91,7 +90,7 @@ export default function SignInForm() {
 					</div>
 					<button
 						className={
-							"btn mt-[7px] md:w-[379px] w-[305px] h-[59px] bg-blue-501 text-white font-medium md:text-[22px] text-[20px] rounded-[5px]" +
+							"btn flex justify-center items-center mt-[7px] md:w-[379px] w-[305px] h-[59px] bg-blue-501 text-white font-medium md:text-[22px] text-[20px] rounded-[5px]" +
 							buttonOpacity
 						}
 						onClick={buttonFunc}

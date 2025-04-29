@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { findErrors, isFormInvalid } from "../form/utils";
-import InputError from "../form/InputError";
+
 import { useGlobalContext } from "../ContextProvider";
 import { useState } from "react";
 
@@ -77,4 +77,8 @@ export default function SearchInput({
 			</div>
 		</div>
 	);
+}
+
+export function InputError({ message }: { message: string }) {
+	return <div className="text-[#FF5959] text-sm mt-[6px]">{message}</div>;
 }

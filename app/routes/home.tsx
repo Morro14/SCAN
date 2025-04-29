@@ -6,6 +6,8 @@ import CotnextProvider from "~/components/ContextProvider";
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "~/redux/hooks";
 import { selectAuth, authReducer } from "~/redux/authSlice";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
 	return [
@@ -17,6 +19,20 @@ export function meta({}: Route.MetaArgs) {
 export default function Home({ children }: { children: React.ReactNode }) {
 	const dispatch = useAppDispatch();
 	const auth = useAppSelector(selectAuth);
+	const nav = useNavigate();
+	function logout() {
+		sessionStorage.clear();
+
+		dispatch(
+			authReducer({
+				token: null,
+				username: null,
+				expire: null,
+				auth: "false",
+			})
+		);
+		nav("/signin");
+	}
 
 	// getting auth info from storage
 	useEffect(() => {
@@ -42,6 +58,19 @@ export default function Home({ children }: { children: React.ReactNode }) {
 		}
 	}, []);
 
+	axios.interceptors.response.use(
+		function (response) {
+			return response;
+		},
+		function (error) {
+			console.log(error);
+			if (error.response.data.errorCode === "Auth_InvalidAccessToken") {
+				logout();
+			} else {
+				return Promise.reject(error);
+			}
+		}
+	);
 	return (
 		<>
 			<CotnextProvider>

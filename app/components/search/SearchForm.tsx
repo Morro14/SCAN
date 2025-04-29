@@ -12,7 +12,7 @@ import getHistograms from "~/requests/histograms";
 import { useAppDispatch } from "~/redux/hooks";
 import { setSearchRes } from "~/redux/searchResultsSlice";
 import Button from "../util/Buttons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function SearchForm() {
 	const [loading, setLoading] = useState(false);
