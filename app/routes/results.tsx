@@ -22,7 +22,6 @@ import Button from "~/components/util/Buttons";
 export function ErrorBoundary() {
 	const error = useRouteError();
 	if (isRouteErrorResponse(error)) {
-		console.log("is route error", error);
 		return (
 			<div>
 				<h1>
@@ -32,7 +31,6 @@ export function ErrorBoundary() {
 			</div>
 		);
 	} else if (error instanceof Error) {
-		console.log("normal error", error);
 		return (
 			<div>
 				<h1>Error</h1>

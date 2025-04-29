@@ -5,7 +5,6 @@ import authFacebook from "../../media/auth-facebook.svg";
 import { isRouteErrorResponse, useRouteError } from "react-router";
 
 export function ErrorBoundary() {
-	console.log("inner error boundary");
 	const error = useRouteError();
 	if (isRouteErrorResponse(error)) {
 		return (

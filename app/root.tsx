@@ -69,7 +69,6 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	console.log("root error");
 	let message = "Oops!";
 	let details = "An unexpected error occurred.";
 	let stack: string | undefined;
@@ -84,7 +83,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 		details = error.message;
 		stack = error.stack;
 	} else if (error instanceof Error) {
-		console.log("normal error", error);
 		return (
 			<div>
 				<h1>Error</h1>

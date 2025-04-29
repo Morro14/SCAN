@@ -76,7 +76,6 @@ export default function Header() {
 		// close mobile menu tab on nav click
 		showMobTab(false);
 	}
-	console.log("header auth", auth);
 	return (
 		<div>
 			<div

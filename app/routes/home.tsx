@@ -20,6 +20,7 @@ export default function Home({ children }: { children: React.ReactNode }) {
 	const dispatch = useAppDispatch();
 	const auth = useAppSelector(selectAuth);
 	const nav = useNavigate();
+
 	function logout() {
 		sessionStorage.clear();
 
@@ -42,19 +43,29 @@ export default function Home({ children }: { children: React.ReactNode }) {
 					authReducer({
 						auth: "true",
 						token: sessionStorage.getItem("token"),
+
 						username: sessionStorage.getItem("username"),
 					})
 				);
 			} else {
 				dispatch(
-					authReducer({ auth: "true", token: sessionStorage.getItem("token") })
+					authReducer({
+						auth: "true",
+						token: sessionStorage.getItem("token"),
+					})
 				);
 			}
 		} else if (auth !== "true" && !sessionStorage.getItem("token")) {
 			sessionStorage.clear();
-			dispatch(authReducer({ auth: "false" }));
-		} else if (auth === "true" && !sessionStorage.getItem("username")) {
-			dispatch(authReducer({ username: sessionStorage.getItem("username") }));
+
+			dispatch(
+				authReducer({
+					token: null,
+					username: null,
+					expire: null,
+					auth: "false",
+				})
+			);
 		}
 	}, []);
 
